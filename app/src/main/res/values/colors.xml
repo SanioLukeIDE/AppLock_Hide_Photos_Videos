@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="primary">#49B2EA</color>
+    <color name="secondary">#1327A3</color>
+
+    <color name="primary_40">#4D49B2EA</color>
+    <color name="secondary_40">#4D1327A3</color>
+
+    <color name="icon_color">#0777B7</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="white_25">#40FFFDFD</color>
+    <color name="black_40">#66000000</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="light_blue_A400">#FF00B0FF</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="black_10">#1A000000</color>
+    <color name="insta_color">#FFE9FA</color>
+    <color name="whatsapp_color">#EAFEEC</color>
+    <color name="fb_color">#DAECFD</color>
+    <color name="twitter_color">#E6F8FD</color>
+    <color name="tiktok_color">#EDEBEB</color>
+    <color name="snap_color">#FEF8E7</color>
+    <color name="chingari_color">#FEEBDC</color>
+    <color name="grey">#9C9C9C</color>
+
+</resources>

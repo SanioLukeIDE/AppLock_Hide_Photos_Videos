@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">App Lock: Hide Photos &amp; Videos</string>
+    <string name="title1">App Lock</string>
+    <string name="desc1">"Additional layer of security to prevent unauthorized access to personal information "</string>
+    <string name="title2">Private Vault</string>
+    <string name="desc2">Allows users to securely store their files, such as photos, videos, documents, and passwords.</string>
+    <string name="title3">Image Intruder</string>
+    <string name="desc3">Security feature that helps prevent unauthorized access to your locked apps.</string>
+    <string name="title4">Hide Apps</string>
+    <string name="desc4">" Users can select the apps they want to hide and will no longer be visible on the home screen "</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string name="biometric_title">Authenticate to access vault</string>
+    <string name="biometric_desc">Place your finger on fingerprint scanner</string>
+    <string name="something_went_wrong">Something went wrong! Please try again later..</string>
+
+</resources>

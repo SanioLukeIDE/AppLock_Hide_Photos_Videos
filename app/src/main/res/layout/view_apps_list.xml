@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/white"
+    android:outlineSpotShadowColor="@color/primary"
+    android:outlineAmbientShadowColor="@color/primary"
+    android:layout_margin="8dp">
+
+    <LinearLayout
+        android:id="@+id/h_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center"
+        android:visibility="gone"
+        >
+
+        <ImageView
+            android:id="@+id/h_logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/googleg_standard_color_18"
+            />
+        <TextView
+            android:id="@+id/h_app_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="appName"
+            android:layout_marginHorizontal="16dp"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            />
+        <ImageView
+            android:id="@+id/h_lock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_lock_grey" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/v_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:gravity="center"
+        android:visibility="gone"
+        >
+
+        <ImageView
+            android:id="@+id/v_logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="6dp"
+            android:src="@drawable/googleg_standard_color_18"
+            />
+        <TextView
+            android:id="@+id/v_app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="appName"
+            android:gravity="center"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_marginHorizontal="8dp"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
