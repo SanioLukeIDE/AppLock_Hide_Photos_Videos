@@ -21,12 +21,14 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.applock.photos.videos.R;
+import com.applock.photos.videos.adapter.AppHIdeAdapter;
 import com.applock.photos.videos.adapter.AppLockAdapter;
 import com.applock.photos.videos.adapter.ContentAdapter;
 import com.applock.photos.videos.databinding.ActivityHiddenImagesBinding;
 import com.applock.photos.videos.databinding.DialogHideAppBinding;
 import com.applock.photos.videos.interfaces.AppsClickedInterface;
 import com.applock.photos.videos.model.AppsModel;
+import com.applock.photos.videos.model.CommLockInfo;
 import com.applock.photos.videos.utils.SharePreferences;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -51,8 +53,16 @@ public class HiddenImagesActivity extends AppCompatActivity implements AppsClick
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+
+        binding.btnBack.setOnClickListener(view -> finish());
 
        if (type == 0){
            ContentAdapter adapter = new ContentAdapter();
@@ -70,7 +80,7 @@ public class HiddenImagesActivity extends AppCompatActivity implements AppsClick
            adapter.setType(1);
        }
        if (type == 1){
-           AppLockAdapter adapter = new AppLockAdapter(false, this);
+           AppHIdeAdapter adapter = new AppHIdeAdapter(false, this);
            binding.contentRecyclerView.setAdapter(adapter);
 
            List<AppsModel> appsModels = getAllDisableApps(getApplicationContext());
@@ -118,14 +128,14 @@ public class HiddenImagesActivity extends AppCompatActivity implements AppsClick
                 intent.setData(uri);
                 startActivity(intent);
             }
-//            preferences.removeHideApps(model.getPackageName());
-//
-//            Toast.makeText(getApplicationContext(), "App removed from hidden vault successfully.", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
-//            startActivity(new Intent(getApplicationContext(), MainActivity.class)
-//                    .putExtra("val", 3));
-//            finish();
+
         });
+
+    }
+
+    @Override
+    public void onItemClicked(CommLockInfo model) {
 
     }
 }

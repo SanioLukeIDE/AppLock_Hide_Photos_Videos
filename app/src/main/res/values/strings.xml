@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">App Lock: Hide Photos &amp; Videos</string>
     <string name="title1">App Lock</string>
+
+    <string name="lockscreen_access_pattern_cell_added">Cell added</string>
+    <string name="lockscreen_access_pattern_start">Draw the unlock pattern</string>
+    <string name="lockscreen_access_pattern_detected">Password saved</string>
+    <string name="lockscreen_access_pattern_cleared">Password removed</string>
+
     <string name="desc1">"Additional layer of security to prevent unauthorized access to personal information "</string>
     <string name="title2">Private Vault</string>
     <string name="desc2">Allows users to securely store their files, such as photos, videos, documents, and passwords.</string>
@@ -10,11 +16,66 @@
     <string name="desc4">" Users can select the apps they want to hide and will no longer be visible on the home screen "</string>
     <!-- TODO: Remove or change this placeholder text -->
 
+    <string name="share_txt">Hey view/download this image</string>
+    <string name="share_image_via">Share File via...</string>
+    <string name="folder_statuses">WhatsAppStatusSaver</string>
+    <string name="image">Images</string>
+    <string name="video">Videos</string>
+    <string name="download">Download</string>
+    <string name="whatsapp_status">Whatsapp Status</string>
+    <string name="oops">Oops! not Status Found 😔</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="open">open</string>
     <string name="close">close</string>
     <string name="biometric_title">Authenticate to access vault</string>
     <string name="biometric_desc">Place your finger on fingerprint scanner</string>
     <string name="something_went_wrong">Something went wrong! Please try again later..</string>
+    <string name="password_gestrue_tips">Draw Password To Unlock</string>
+    <string name="password_error_count">Passwords do not match. Please try again.</string>
+
+    <string name="lock_first_btn" formatted="false">Protect(%s)</string>
+
+    <string name="lock_recording_intro_header">Set an unlock password for the app</string>
+    <string name="lock_settings_help_how_to_record">How to draw an unlock pattern</string>
+    <string name="lock_recording_incorrect_too_short">There should be at least 4 points connected.</string>
+    <string name="lock_pattern_entered_header">record password</string>
+    <string name="lock_need_to_confirm">Draw the pattern again to confirm</string>
+    <string name="lock_need_to_unlock_wrong">Passwords do not match, please try again.</string>
+    <string name="lock_draw_unlock_pattern">Draw the unlock path</string>
+    <string name="lock_enter_pin_code">Enter the numeric password</string>
+    <string name="lock_pattern_confirmed_header"></string>
+
+    <!--数字解锁相关-->
+    <string name="num_create_text_01">Enter a 4-digit password to unlock</string>
+    <string name="num_create_text_02">Enter again to confirm</string>
+    <string name="num_create_text_03">Passwords do not match, please try again</string>
+    <string name="number_1">1</string>
+    <string name="number_2">2</string>
+    <string name="number_3">3</string>
+    <string name="number_4">4</string>
+    <string name="number_5">5</string>
+    <string name="number_6">6</string>
+    <string name="number_7">7</string>
+    <string name="number_8">8</string>
+    <string name="number_9">9</string>
+    <string name="number_0">0</string>
+    <string name="password_short">Please enter at least 4 characters.</string>
+
+    <string-array name="lock_time_array">
+        <item>15 Second</item>
+        <item>30 Second</item>
+        <item>1 minute</item>
+        <item>3 minute</item>
+        <item>5 minute</item>
+        <item>10 minute</item>
+        <item>30 minute</item>
+        <item>immediately</item>
+    </string-array>
+
+    <string name="dialog_tip">Your system is greater than or equal to 5.0, we need to obtain the "view application usage" permission</string>
+    <string name="enter_valid_url">Enter Valid URL</string>
+    <string name="ok">OK</string>
+    <string name="getting_downloading_link">Getting Downloading Link...</string>
 
 </resources>

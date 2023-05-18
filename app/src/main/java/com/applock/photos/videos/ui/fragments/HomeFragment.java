@@ -1,7 +1,6 @@
 package com.applock.photos.videos.ui.fragments;
 
-import static com.applock.photos.videos.utils.Utility.getInstalledApps;
-
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -9,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +18,22 @@ import com.applock.photos.videos.adapter.AppLockAdapter;
 import com.applock.photos.videos.databinding.FragmentHomeBinding;
 import com.applock.photos.videos.interfaces.AppsClickedInterface;
 import com.applock.photos.videos.model.AppsModel;
+import com.applock.photos.videos.model.CommLockInfo;
 import com.applock.photos.videos.ui.activity.MainActivity;
+import com.applock.photos.videos.ui.ext.LockMainContract;
+import com.applock.photos.videos.ui.ext.LockMainPresenter;
+import com.applock.photos.videos.utils.CommLockInfoManager;
+import com.applock.photos.videos.utils.MyApp;
 
-public class HomeFragment extends Fragment implements AppsClickedInterface {
+import java.util.ArrayList;
+import java.util.List;
+
+public class HomeFragment extends Fragment implements LockMainContract.View, AppsClickedInterface {
 
     FragmentHomeBinding binding;
     AppLockAdapter recommendedAdapter, adapter;
     MainActivity activity;
+    LockMainPresenter mLockMainPresenter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,11 +41,13 @@ public class HomeFragment extends Fragment implements AppsClickedInterface {
 
         activity = (MainActivity) requireActivity();
 
-        recommendedAdapter = new AppLockAdapter(true, this);
-        adapter = new AppLockAdapter(true, this);
+        recommendedAdapter = new AppLockAdapter(this);
+        adapter = new AppLockAdapter(this);
         binding.recyclerView.setAdapter(adapter);
         binding.recommendedRecyclerView.setAdapter(recommendedAdapter);
 
+        mLockMainPresenter = new LockMainPresenter(this, requireContext());
+        mLockMainPresenter.loadAppInfo(requireContext());
 
         return binding.getRoot();
     }
@@ -49,19 +60,6 @@ public class HomeFragment extends Fragment implements AppsClickedInterface {
         binding.btnVault.setOnClickListener(view -> activity.initVault());
         binding.btnStatusSaver.setOnClickListener(view -> activity.startStatusSaver());
 
-        binding.rdUnlocked.setChecked(true);
-        unlockData();
-
-        binding.group.setOnCheckedChangeListener((radioGroup, i) -> {
-            switch (i){
-                case R.id.rd_unlocked:
-                    unlockData();
-                    break;
-                case R.id.rd_locked:
-                    lockedData();
-                    break;
-            }
-        });
 
         binding.btnMenu.setOnClickListener(v -> {
             activity.drawerOpen();
@@ -89,27 +87,72 @@ public class HomeFragment extends Fragment implements AppsClickedInterface {
     }
 
 
-    private void unlockData() {
-        adapter.setType(1);
-        recommendedAdapter.setType(1);
+    private void unlockData(List<CommLockInfo> list, List<CommLockInfo> lockedApps) {
+        List<CommLockInfo> favApps = new ArrayList<>();
+        List<String> strings = MyApp.getPreferences().getFavoriteApps();
 
-        recommendedAdapter.submitList(getInstalledApps(requireContext(), true));
-        adapter.submitList(getInstalledApps(requireContext(),false));
+        binding.recommendedRecyclerView.setVisibility(View.VISIBLE);
+        binding.tvRec.setVisibility(View.VISIBLE);
+        binding.tvApps.setText("More Apps");
+
+        for (CommLockInfo info : lockedApps){
+            for (String s : strings){
+                if (s.equals(info.getPackageName())){
+                    favApps.add(info);
+                }
+            }
+        }
+
+        recommendedAdapter.submitList(favApps);
+        adapter.submitList(list);
 
     }
 
-    private void lockedData() {
-        adapter.setType(2);
-        recommendedAdapter.setType(2);
-
-        recommendedAdapter.submitList(getInstalledApps(requireContext(), true));
-        adapter.submitList(getInstalledApps(requireContext(),false));
+    private void lockedData(List<CommLockInfo> lockedApps) {
+        binding.recommendedRecyclerView.setVisibility(View.GONE);
+        binding.tvRec.setVisibility(View.GONE);
+        binding.tvApps.setText("Locked Apps");
+        adapter.submitList(lockedApps);
 
     }
 
 
     @Override
     public void onItemClicked(AppsModel model) {
+
+    }
+
+    @Override
+    public void onItemClicked(CommLockInfo model) {
+
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public void loadAppInfoSuccess(List<CommLockInfo> list) {
+        List<CommLockInfo> lockedApps = new ArrayList<>();
+        List<CommLockInfo> unLockedApps = new ArrayList<>();
+
+        for (CommLockInfo info : list){
+            if (info.isLocked())
+                lockedApps.add(info);
+            else
+                unLockedApps.add(info);
+        }
+
+        binding.group.setOnCheckedChangeListener((radioGroup, i) -> {
+            switch (i){
+                case R.id.rd_unlocked:
+                    unlockData(unLockedApps, lockedApps);
+                    break;
+                case R.id.rd_locked:
+                    lockedData(lockedApps);
+                    break;
+            }
+        });
+
+        binding.rdUnlocked.setChecked(true);
+        unlockData(unLockedApps, lockedApps);
 
     }
 }

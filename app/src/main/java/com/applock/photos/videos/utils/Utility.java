@@ -11,11 +11,15 @@ import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.applock.photos.videos.model.AppsModel;
+import com.applock.photos.videos.model.CommLockInfo;
 import com.applock.photos.videos.model.ImageFolder;
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
@@ -113,30 +117,36 @@ public class Utility {
         return imageFolders;
     }
 
-    public static String getCategoryName(int category) {
-        switch (category) {
-            case ApplicationInfo.CATEGORY_AUDIO:
-                return "Audio";
-            case ApplicationInfo.CATEGORY_GAME:
-                return "Game";
-            case ApplicationInfo.CATEGORY_IMAGE:
-                return "Photo";
-            case ApplicationInfo.CATEGORY_MAPS:
-                return "Maps";
-            case ApplicationInfo.CATEGORY_NEWS:
-                return "News";
-            case ApplicationInfo.CATEGORY_PRODUCTIVITY:
-                return "Productivity";
-            case ApplicationInfo.CATEGORY_SOCIAL:
-                return "Social";
-            case ApplicationInfo.CATEGORY_VIDEO:
-                return "Video";
-            default:
-                return "Other";
+    public static void OpenApp(Context context,String Package) {
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(Package);
+        if (launchIntent != null) {
+            context.startActivity(launchIntent);
+        } else {
+            setToast(context,"App Not Available.");
         }
     }
 
-    public static List<AppsModel> getAllDisableApps(Context context){
+    public static void setToast(Context _mContext, String str) {
+        Toast toast = Toast.makeText(_mContext, str, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
+
+    public static List<CommLockInfo> clearRepeatCommLockInfo(List<CommLockInfo> lockInfos) {
+        HashMap<String, CommLockInfo> hashMap = new HashMap<>();
+        for (CommLockInfo lockInfo : lockInfos) {
+            if (!hashMap.containsKey(lockInfo.getPackageName())) {
+                hashMap.put(lockInfo.getPackageName(), lockInfo);
+            }
+        }
+        List<CommLockInfo> commLockInfos = new ArrayList<>();
+        for (HashMap.Entry<String, CommLockInfo> entry : hashMap.entrySet()) {
+            commLockInfos.add(entry.getValue());
+        }
+        return commLockInfos;
+    }
+
+    public static List<AppsModel> getAllDisableApps(Context context) {
         List<AppsModel> disabledAppsList = new ArrayList<>();
         PackageManager packageManager = context.getPackageManager();
         List<ApplicationInfo> applicationInfoList = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
@@ -147,12 +157,11 @@ public class Utility {
                 Drawable appIcon = packageManager.getApplicationIcon(appInfo);
                 String appName = (String) packageManager.getApplicationLabel(appInfo);
                 String packageName = appInfo.packageName;
-                for (String val : preferences.getHideApps()){
+                for (String val : preferences.getHideApps()) {
                     if (val.equals(packageName)) {
                         AppsModel app = new AppsModel(appName, packageName, appIcon);
                         disabledAppsList.add(app);
                     }
-                    break;
                 }
             }
         }
@@ -162,6 +171,7 @@ public class Utility {
 
     public static List<AppsModel> getAllInstalledApps(Context context) {
         List<AppsModel> list = new ArrayList<>();
+        SharePreferences preferences = new SharePreferences(context);
 
         PackageManager packageManager = context.getPackageManager();
         Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -172,20 +182,25 @@ public class Utility {
 
             // Get package name
             String packageName = resolveInfo.activityInfo.packageName;
-            if (!isAppDisabled(context, packageName)){
 
-                // Get application label (name)
-                String label = String.valueOf(resolveInfo.loadLabel(packageManager));
-                // Get application icon (logo)
-                Drawable icon = resolveInfo.loadIcon(packageManager);
+            // Get application label (name)
+            String label = String.valueOf(resolveInfo.loadLabel(packageManager));
+            // Get application icon (logo)
+            Drawable icon = resolveInfo.loadIcon(packageManager);
 
-                String className = resolveInfo.activityInfo.name;
+            String className = resolveInfo.activityInfo.name;
 
-                AppsModel model = new AppsModel(label, packageName, icon);
-                model.setClassName(className);
-                list.add(model);
-            }
+            Log.e(label, label+" --> getAllInstalledApps: ---> "+packageName+ "     "+className);
 
+           for (String s : preferences.getHideApps()){
+               if (packageName.equals(s)){
+                   preferences.removeHideApps(packageName);
+               }
+           }
+
+            AppsModel model = new AppsModel(label, packageName, icon);
+            model.setClassName(className);
+            list.add(model);
 
         }
 

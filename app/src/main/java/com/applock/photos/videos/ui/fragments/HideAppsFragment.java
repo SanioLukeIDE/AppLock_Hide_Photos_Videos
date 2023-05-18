@@ -35,11 +35,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.applock.photos.videos.R;
+import com.applock.photos.videos.adapter.AppHIdeAdapter;
 import com.applock.photos.videos.adapter.AppLockAdapter;
 import com.applock.photos.videos.databinding.DialogHideAppBinding;
 import com.applock.photos.videos.databinding.FragmentHideAppsBinding;
 import com.applock.photos.videos.interfaces.AppsClickedInterface;
 import com.applock.photos.videos.model.AppsModel;
+import com.applock.photos.videos.model.CommLockInfo;
 import com.applock.photos.videos.ui.activity.HiddenImagesActivity;
 import com.applock.photos.videos.ui.activity.MainActivity;
 import com.applock.photos.videos.utils.SharePreferences;
@@ -51,7 +53,7 @@ public class HideAppsFragment extends Fragment implements AppsClickedInterface {
     FragmentHideAppsBinding binding;
     int i = 1;
     MainActivity activity;
-    AppLockAdapter adapter;
+    AppHIdeAdapter adapter;
     SharePreferences preferences;
 
     @Override
@@ -62,7 +64,7 @@ public class HideAppsFragment extends Fragment implements AppsClickedInterface {
 
         preferences = new SharePreferences(requireContext());
 
-        adapter = new AppLockAdapter(false, this);
+        adapter = new AppHIdeAdapter(false, this);
         binding.recyclerView.setAdapter(adapter);
 
         return binding.getRoot();
@@ -187,6 +189,11 @@ public class HideAppsFragment extends Fragment implements AppsClickedInterface {
             dialog.dismiss();
             activity.startHideApps();
         });
+
+    }
+
+    @Override
+    public void onItemClicked(CommLockInfo model) {
 
     }
 }

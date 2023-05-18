@@ -35,6 +35,9 @@ public class NavigationDrawerFragment extends Fragment {
 
         activity = (MainActivity) requireActivity();
 
+        String link = "https://play.google.com/store/apps/details?id=com.instag.caption.hashtag.genrator";
+        String link1 = "https://play.google.com/store/apps/details?id=com.photosnap.pfpeditor.instamaker";
+
         return binding.getRoot();
     }
 

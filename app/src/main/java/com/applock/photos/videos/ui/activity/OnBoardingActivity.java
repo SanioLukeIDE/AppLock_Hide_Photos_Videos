@@ -19,6 +19,7 @@ import com.applock.photos.videos.R;
 import com.applock.photos.videos.adapter.OnBoardingAdapter;
 import com.applock.photos.videos.databinding.ActivityOnBoardingBinding;
 import com.applock.photos.videos.model.DataModel;
+import com.applock.photos.videos.utils.MyApp;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -71,6 +72,7 @@ public class OnBoardingActivity extends AppCompatActivity {
             if (binding.viewPager.getCurrentItem() + 1 < adapter.getItemCount()) {
                 binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1);
             } else {
+                MyApp.getPreferences().setFirstRun(false);
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
             }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/layout_toolbar"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="226dp"
+            android:background="@color/primary">
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                android:padding="10dp"
+                android:src="@drawable/baseline_arrow_back_ios_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_toRightOf="@+id/btn_back"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/lock_icon"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:padding="20dp"
+                android:src="@drawable/ic_lock" />
+
+            <TextView
+                android:id="@+id/lock_tip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lock_icon"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Welcome to App Lock"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <com.applock.photos.videos.libs.LockPatternView
+            android:id="@+id/lock_pattern_view"
+            android:layout_width="290dp"
+            android:layout_height="290dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/btn_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:gravity="center"
+            android:text="Reset"
+            android:layout_margin="10dp"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+</layout>

@@ -1,5 +1,7 @@
 package com.applock.photos.videos.utils;
 
+import static com.applock.photos.videos.utils.Const.FAVORITE_APPS_LIST;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -72,6 +74,14 @@ public class SharePreferences {
         ArrayList<String> list = getListString("hiddenImages");
         list.add(path);
         putListString("hiddenImages", list);
+    }
+
+    public void setFavoriteApps(List<String> list) {
+        putListString(FAVORITE_APPS_LIST, (ArrayList<String>) list);
+    }
+
+    public List<String> getFavoriteApps() {
+        return getListString(FAVORITE_APPS_LIST);
     }
 
     public void removeHiddenImage(String path) {
@@ -335,6 +345,10 @@ public class SharePreferences {
      */
     public String getString(String key) {
         return preferences.getString(key, null);
+    }
+
+    public String getCustomString(String key, String val) {
+        return preferences.getString(key, val);
     }
 
     /**
@@ -681,6 +695,16 @@ public class SharePreferences {
 //        return getObject("login_info", UserModel.class);
 //    }
 
+
+    public void setFirstLock(boolean value) {
+        putBoolean("isFirstLock", value);
+    }
+
+    public boolean isFirstLock() {
+        return getBoolean("isFirstLock");
+    }
+
+
     public void setFCMToken(String token) {
         putString("FCM_token", token);
     }
@@ -712,19 +736,14 @@ public class SharePreferences {
     public String getImageURL() {
         return getString("imgURL");
     }
-}
 
-class DrawableTypeAdapter implements JsonDeserializer<Drawable>, JsonSerializer<Drawable> {
-    @Override
-    public JsonElement serialize(Drawable src, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(src.toString()); // convert the Drawable to a String representation
+    public boolean getBoolean(String key, boolean bool) {
+        return preferences.getBoolean(key, bool);
     }
 
-    @Override
-    public Drawable deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        String drawableString = json.getAsString();
-        // convert the String representation of the Drawable back to a Drawable object
-        // replace this with your own implementation of converting the String to a Drawable
-        return null;
+    public boolean getFBoolean(String key) {
+        return preferences.getBoolean(key, false);
     }
+
+
 }

@@ -67,7 +67,7 @@
             android:textSize="14sp" />
 
         <EditText
-            android:id="@+id/link"
+            android:id="@+id/et_link"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginHorizontal="32dp"

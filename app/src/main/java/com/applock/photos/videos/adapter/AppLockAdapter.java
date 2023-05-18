@@ -1,6 +1,7 @@
 package com.applock.photos.videos.adapter;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,68 +15,69 @@ import com.applock.photos.videos.R;
 import com.applock.photos.videos.databinding.ViewAppsListBinding;
 import com.applock.photos.videos.interfaces.AppsClickedInterface;
 import com.applock.photos.videos.model.AppsModel;
+import com.applock.photos.videos.model.CommLockInfo;
 import com.applock.photos.videos.ui.fragments.HideAppsFragment;
+import com.applock.photos.videos.utils.CommLockInfoManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.Objects;
 
-public class AppLockAdapter extends ListAdapter<AppsModel, AppLockAdapter.ViewHolder> {
+public class AppLockAdapter extends ListAdapter<CommLockInfo, AppLockAdapter.ViewHolder> {
 
     Context context;
-    int type;
-    boolean isLock;
     AppsClickedInterface clickedInterface;
+    PackageManager packageManager;
+    CommLockInfoManager mLockInfoManager;
 
-
-    public AppLockAdapter(boolean isLock, AppsClickedInterface appsClickedInterface) {
+    public AppLockAdapter(AppsClickedInterface appsClickedInterface) {
         super(diffCallback);
-        this.isLock = isLock;
         clickedInterface = appsClickedInterface;
     }
 
-    public void setType(int type) {
-        this.type = type;
-    }
 
     @NonNull
     @Override
     public AppLockAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
+        packageManager = context.getPackageManager();
+        mLockInfoManager = new CommLockInfoManager(context);
         ViewAppsListBinding binding = ViewAppsListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AppLockAdapter.ViewHolder holder, int position) {
-        AppsModel model = getItem(position);
+        CommLockInfo model = getItem(position);
 
-        if (isLock){
-            holder.binding.hLayout.setVisibility(View.VISIBLE);
 
-            Glide.with(context).load(model.getIcon())
-                    .apply(RequestOptions.circleCropTransform())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(holder.binding.hLogo);
+        holder.binding.hLayout.setVisibility(View.VISIBLE);
 
-            holder.binding.hAppName.setText(model.getAppName());
+        Glide.with(context).load(packageManager.getApplicationIcon(model.getAppInfo()))
+                .apply(RequestOptions.circleCropTransform())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.binding.hLogo);
 
-            if (type == 1){
+        holder.binding.hAppName.setText(model.getAppName());
+
+        if (!model.isLocked()) {
+            holder.binding.hLock.setImageResource(R.drawable.ic_lock_grey);
+        } else
+            holder.binding.hLock.setImageResource(R.drawable.ic_lock_gradient);
+
+
+        holder.itemView.setOnClickListener(view -> {
+            if (model.isLocked()){
+                model.setLocked(false);
+                mLockInfoManager.unlockCommApplication(model.getPackageName());
                 holder.binding.hLock.setImageResource(R.drawable.ic_lock_grey);
-            } else holder.binding.hLock.setImageResource(R.drawable.ic_lock_gradient);
-        } else {
-            holder.binding.vLayout.setVisibility(View.VISIBLE);
-
-            Glide.with(context).load(model.getIcon())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(holder.binding.vLogo);
-
-            holder.binding.vAppName.setText(model.getAppName());
-
-        }
-
-        holder.itemView.setOnClickListener(view -> clickedInterface.onItemClicked(model));
+            } else {
+                model.setLocked(true);
+                mLockInfoManager.unlockCommApplication(model.getPackageName());
+                holder.binding.hLock.setImageResource(R.drawable.ic_lock_gradient);
+            }
+        });
 
     }
 
@@ -94,14 +96,14 @@ public class AppLockAdapter extends ListAdapter<AppsModel, AppLockAdapter.ViewHo
         return position;
     }
 
-    static DiffUtil.ItemCallback<AppsModel> diffCallback = new DiffUtil.ItemCallback<AppsModel>() {
+    static DiffUtil.ItemCallback<CommLockInfo> diffCallback = new DiffUtil.ItemCallback<CommLockInfo>() {
         @Override
-        public boolean areItemsTheSame(@NonNull AppsModel oldItem, @NonNull AppsModel newItem) {
+        public boolean areItemsTheSame(@NonNull CommLockInfo oldItem, @NonNull CommLockInfo newItem) {
             return Objects.equals(oldItem.getAppName(), newItem.getAppName());
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull AppsModel oldItem, @NonNull AppsModel newItem) {
+        public boolean areContentsTheSame(@NonNull CommLockInfo oldItem, @NonNull CommLockInfo newItem) {
             return Objects.equals(oldItem, newItem);
         }
     };
