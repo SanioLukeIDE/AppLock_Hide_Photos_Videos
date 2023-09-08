@@ -5,7 +5,6 @@ import static com.applock.photos.videos.utils.Const.LOCK_IS_INIT_DB;
 import static com.applock.photos.videos.utils.Const.LOCK_IS_INIT_FAVITER;
 
 import android.app.IntentService;
-import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -14,11 +13,8 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 
 import com.applock.photos.videos.model.CommLockInfo;
-import com.applock.photos.videos.model.FavoriteInfo;
 import com.applock.photos.videos.utils.CommLockInfoManager;
-import com.applock.photos.videos.utils.MyApp;
-
-import org.litepal.crud.DataSupport;
+import com.applock.photos.videos.singletonClass.MyApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,11 +46,11 @@ public class LoadAppListService extends IntentService {
     private void checkData() {
         time = System.currentTimeMillis();
 
-        boolean isInitFavorite = MyApp.getPreferences().getBoolean(LOCK_IS_INIT_FAVITER, false);
-        boolean isInitDb = MyApp.getPreferences().getBoolean(LOCK_IS_INIT_DB, false);
+        boolean isInitFavorite = MyApplication.getPreferences().getBoolean(LOCK_IS_INIT_FAVITER, false);
+        boolean isInitDb = MyApplication.getPreferences().getBoolean(LOCK_IS_INIT_DB, false);
 
         if (!isInitFavorite) {
-            MyApp.getPreferences().putBoolean(LOCK_IS_INIT_FAVITER, true);
+            MyApplication.getPreferences().putBoolean(LOCK_IS_INIT_FAVITER, true);
             initFavoriteApps();
         }
 
@@ -103,7 +99,7 @@ public class LoadAppListService extends IntentService {
                     mLockInfoManager.deleteCommLockInfoTable(commlist);
             }
         } else {
-            MyApp.getPreferences().putBoolean(LOCK_IS_INIT_DB, true);
+            MyApplication.getPreferences().putBoolean(LOCK_IS_INIT_DB, true);
             try {
                 mLockInfoManager.instanceCommLockInfoTable(resolveInfoList);
             } catch (PackageManager.NameNotFoundException e) {
@@ -145,6 +141,6 @@ public class LoadAppListService extends IntentService {
         packageList.add("com.android.dialer");
         packageList.add("com.twitter.android");
 
-        MyApp.getPreferences().setFavoriteApps(packageList);
+        MyApplication.getPreferences().setFavoriteApps(packageList);
     }
 }

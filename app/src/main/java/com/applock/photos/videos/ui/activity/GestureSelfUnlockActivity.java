@@ -9,12 +9,7 @@ import static com.applock.photos.videos.utils.Const.LOCK_FROM_UNLOCK;
 import static com.applock.photos.videos.utils.Const.LOCK_PACKAGE_NAME;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.TextureView;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -24,12 +19,9 @@ import com.applock.photos.videos.databinding.ActivityGestureSelfUnlockBinding;
 import com.applock.photos.videos.libs.LockPatternUtils;
 import com.applock.photos.videos.libs.LockPatternView;
 import com.applock.photos.videos.libs.LockPatternViewPattern;
-import com.applock.photos.videos.libs.UnLockMenuPopWindow;
+import com.applock.photos.videos.service.CameraService;
 import com.applock.photos.videos.utils.CommLockInfoManager;
-import com.applock.photos.videos.utils.MyApp;
-import com.applock.photos.videos.utils.SystemBarHelper;
-
-import java.util.List;
+import com.applock.photos.videos.singletonClass.MyApplication;
 
 public class GestureSelfUnlockActivity extends AppCompatActivity {
 
@@ -41,6 +33,7 @@ public class GestureSelfUnlockActivity extends AppCompatActivity {
     private String pkgName;
     private CommLockInfoManager mManager;
     ActivityGestureSelfUnlockBinding binding;
+    private int wrongBiometricCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,13 +76,22 @@ public class GestureSelfUnlockActivity extends AppCompatActivity {
                     finish();
                 }
             } else {
+                wrongBiometricCount++;
                 mLockPatternView.setDisplayMode(LockPatternView.DisplayMode.Wrong);
+
+                if (MyApplication.getPreferences().getAttemptFailedCount() == wrongBiometricCount){
+                    if (MyApplication.getPreferences().isIntruderDetectorOnOff()){
+                        startService(new Intent(getApplicationContext(), CameraService.class));
+                        wrongBiometricCount = 0;
+                    }
+                }
+
                 if (pattern.size() >= LockPatternUtils.MIN_PATTERN_REGISTER_FAIL) {
                     mFailedPatternAttemptsSinceLastTimeout++;
                     int retry = LockPatternUtils.FAILED_ATTEMPTS_BEFORE_TIMEOUT - mFailedPatternAttemptsSinceLastTimeout;
                 }
                 if (mFailedPatternAttemptsSinceLastTimeout >= 3) {
-                    if (MyApp.getPreferences().getBoolean(LOCK_AUTO_RECORD_PIC, false)) {
+                    if (MyApplication.getPreferences().getBoolean(LOCK_AUTO_RECORD_PIC, false)) {
 
                     }
                 }

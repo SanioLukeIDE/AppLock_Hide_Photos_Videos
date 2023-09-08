@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/dig_txt_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:text="@string/select_the_desigred_methode_to_download_tiktok_try_the_other_one_if_one_dosent_work" />
+
+    <Button
+        android:id="@+id/dig_btn_met0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/rect_round_gradient_12"
+        android:text="Server 0"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/dig_btn_met1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/rect_round_gradient_12"
+        android:text="Server 1"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/dig_btn_met2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/rect_round_gradient_12"
+        android:text="Server 2"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/dig_btn_met3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/rect_round_gradient_12"
+        android:text="Server 3"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/dig_btn_met4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/rect_round_gradient_12"
+        android:text="Server 4"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/dig_btn_met5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/rect_round_gradient_12"
+        android:text="Server 5"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/dig_btn_met6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/rect_round_gradient_12"
+        android:text="Server 6"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
+
+    <Button
+        android:id="@+id/dig_btn_cancel"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/rect_round_gradient_12"
+        android:text="@string/cancel"
+        android:textColor="@color/white" />
+
+</LinearLayout>

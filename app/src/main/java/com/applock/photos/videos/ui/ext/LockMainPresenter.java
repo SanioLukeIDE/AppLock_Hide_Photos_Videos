@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 
 import com.applock.photos.videos.model.CommLockInfo;
 import com.applock.photos.videos.utils.CommLockInfoManager;
-import com.applock.photos.videos.utils.MyApp;
+import com.applock.photos.videos.singletonClass.MyApplication;
 
 import java.util.Iterator;
 import java.util.List;
@@ -81,7 +81,7 @@ public class LockMainPresenter implements LockMainContract.Presenter {
                     infoIterator.remove();
                 }
             }
-            MyApp.getPreferences().putInt(LOCK_FAVITER_NUM, favoriteNum);
+            MyApplication.getPreferences().putInt(LOCK_FAVITER_NUM, favoriteNum);
             return commLockInfos;
         }
 

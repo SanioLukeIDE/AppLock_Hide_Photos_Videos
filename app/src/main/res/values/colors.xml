@@ -14,6 +14,9 @@
     <color name="primary_40">#4D49B2EA</color>
     <color name="secondary_40">#4D1327A3</color>
 
+    <color name="lg_purple">#7871C3</color>
+    <color name="lg_blue">#3187D7</color>
+
     <color name="icon_color">#0777B7</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="white_25">#40FFFDFD</color>
@@ -32,5 +35,7 @@
     <color name="snap_color">#FEF8E7</color>
     <color name="chingari_color">#FEEBDC</color>
     <color name="grey">#9C9C9C</color>
+    <color name="dark_grey">#444444</color>
+    <color name="white_70">#B3FFFFFF</color>
 
 </resources>

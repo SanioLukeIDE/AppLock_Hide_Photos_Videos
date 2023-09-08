@@ -1,6 +1,7 @@
 package com.applock.photos.videos.ui.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -8,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,10 @@ import com.applock.photos.videos.interfaces.AppsClickedInterface;
 import com.applock.photos.videos.model.AppsModel;
 import com.applock.photos.videos.model.CommLockInfo;
 import com.applock.photos.videos.ui.activity.MainActivity;
+import com.applock.photos.videos.ui.activity.ThemesActivity;
 import com.applock.photos.videos.ui.ext.LockMainContract;
 import com.applock.photos.videos.ui.ext.LockMainPresenter;
-import com.applock.photos.videos.utils.CommLockInfoManager;
-import com.applock.photos.videos.utils.MyApp;
+import com.applock.photos.videos.singletonClass.MyApplication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,9 @@ public class HomeFragment extends Fragment implements LockMainContract.View, App
         binding.btnMenu.setOnClickListener(v -> {
             activity.drawerOpen();
         });
+        binding.btnTheme.setOnClickListener(v -> {
+            startActivity(new Intent(activity, ThemesActivity.class));
+        });
 
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
@@ -89,7 +93,7 @@ public class HomeFragment extends Fragment implements LockMainContract.View, App
 
     private void unlockData(List<CommLockInfo> list, List<CommLockInfo> lockedApps) {
         List<CommLockInfo> favApps = new ArrayList<>();
-        List<String> strings = MyApp.getPreferences().getFavoriteApps();
+        List<String> strings = MyApplication.getPreferences().getFavoriteApps();
 
         binding.recommendedRecyclerView.setVisibility(View.VISIBLE);
         binding.tvRec.setVisibility(View.VISIBLE);
@@ -103,8 +107,10 @@ public class HomeFragment extends Fragment implements LockMainContract.View, App
             }
         }
 
-        recommendedAdapter.submitList(favApps);
-        adapter.submitList(list);
+        new Handler().post(()->{
+            recommendedAdapter.submitList(favApps);
+            adapter.submitList(list);
+        });
 
     }
 
@@ -112,8 +118,9 @@ public class HomeFragment extends Fragment implements LockMainContract.View, App
         binding.recommendedRecyclerView.setVisibility(View.GONE);
         binding.tvRec.setVisibility(View.GONE);
         binding.tvApps.setText("Locked Apps");
-        adapter.submitList(lockedApps);
-
+        new Handler().post(()-> {
+            adapter.submitList(lockedApps);
+        });
     }
 
 

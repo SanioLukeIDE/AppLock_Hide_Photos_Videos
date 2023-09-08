@@ -3,7 +3,7 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-        jcenter()
+        mavenCentral()
         maven { url 'https://www.jitpack.io' }
     }
 }
@@ -16,5 +16,7 @@ dependencyResolutionManagement {
         maven { url 'https://www.jitpack.io' }
     }
 }
-rootProject.name = "App Lock Hide Photos & Videos"
+rootProject.name = "AppLockHidePhotos&Videos"
 include ':app'
+include ':devname'
+include ':lockmodule'

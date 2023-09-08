@@ -1,5 +1,9 @@
 package com.applock.photos.videos.ui.fragments;
 
+import static com.applock.photos.videos.utils.Utility.openPrivacyPolicy;
+import static com.applock.photos.videos.utils.Utility.reviewDialog;
+import static com.applock.photos.videos.utils.Utility.shareAppDialog;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,7 +20,9 @@ import android.view.ViewGroup;
 import com.applock.photos.videos.BuildConfig;
 import com.applock.photos.videos.R;
 import com.applock.photos.videos.databinding.FragmentNavigationDrawerBinding;
+import com.applock.photos.videos.ui.activity.ImageIntruderActivity;
 import com.applock.photos.videos.ui.activity.MainActivity;
+import com.applock.photos.videos.ui.activity.MainSettingsActivity;
 import com.google.android.gms.tasks.Task;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
@@ -35,9 +41,6 @@ public class NavigationDrawerFragment extends Fragment {
 
         activity = (MainActivity) requireActivity();
 
-        String link = "https://play.google.com/store/apps/details?id=com.instag.caption.hashtag.genrator";
-        String link1 = "https://play.google.com/store/apps/details?id=com.photosnap.pfpeditor.instamaker";
-
         return binding.getRoot();
     }
 
@@ -49,60 +52,44 @@ public class NavigationDrawerFragment extends Fragment {
             activity.closeDrawer();
             activity.startAppLock();
         });
+
         binding.btnHideApps.setOnClickListener(view -> {
             activity.closeDrawer();
             activity.startHideApps();
         });
+
         binding.btnVault.setOnClickListener(view -> {
             activity.closeDrawer();
             activity.initVault();
         });
+
         binding.btnStatusSaver.setOnClickListener(view -> {
             activity.closeDrawer();
             activity.startStatusSaver();
         });
 
+        binding.navSetting.setOnClickListener(view -> {
+            activity.closeDrawer();
+            startActivity(new Intent(activity, MainSettingsActivity.class));
+        });
+        binding.btnIntruder.setOnClickListener(view -> {
+            activity.closeDrawer();
+            startActivity(new Intent(activity, ImageIntruderActivity.class));
+        });
+
         binding.navPolicy.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://invotechgirge.blogspot.com/p/privacy-policy_8.html"));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            openPrivacyPolicy(activity);
         });
 
         binding.navShare.setOnClickListener(view -> {
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "Looking to take your Instagram game to the next level? Look no further than " + getString(R.string.app_name) + "!!\n" +
-                    "With our multiple editing features you'll be able to create stunning content that will help you stand out on the platform. \n" +
-                    "Download " + getString(R.string.app_name) + " today and elevate your Instagram presence!\n" +
-                    "\nJoin now with the link: \nhttps://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID);
-            sendIntent.setType("text/plain");
-            startActivity(sendIntent);
+            shareAppDialog(activity);
         });
 
         binding.navRate.setOnClickListener(view -> {
-            reviewDialog();
+            reviewDialog(activity);
         });
 
     }
 
-    private void reviewDialog() {
-        ReviewManager manager = ReviewManagerFactory.create(requireActivity());
-        Task<ReviewInfo> request = manager.requestReviewFlow();
-        request.addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                // We can get the ReviewInfo object
-                ReviewInfo reviewInfo = task.getResult();
-                Task<Void> flow = manager.launchReviewFlow(requireActivity(), reviewInfo);
-                flow.addOnCompleteListener(task1 -> {
-
-                });
-            } else {
-                // There was some problem, log or handle the error code.
-                Log.e("reviewDialog: ", Objects.requireNonNull(task.getException()).getLocalizedMessage());
-            }
-        });
-
-    }
 
 }

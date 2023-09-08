@@ -9,7 +9,6 @@ import static com.applock.photos.videos.utils.Utility.setFullScreen;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -18,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.applock.photos.videos.R;
 import com.applock.photos.videos.service.LoadAppListService;
 import com.applock.photos.videos.service.LockService;
-import com.applock.photos.videos.utils.MyApp;
+import com.applock.photos.videos.singletonClass.MyApplication;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
@@ -30,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
         setFullScreen(this);
 
         startService(new Intent(getApplicationContext(), LoadAppListService.class));
-        if (MyApp.getPreferences().getFBoolean(LOCK_STATE)) {
+        if (MyApplication.getPreferences().getFBoolean(LOCK_STATE)) {
             /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(new Intent(getApplicationContext(), LockService.class));
             } else*/ startService(new Intent(getApplicationContext(), LockService.class));
@@ -39,7 +38,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(() -> {
 
 
-            if (!MyApp.getPreferences().isFirstLock()) {
+            if (!MyApplication.getPreferences().isFirstLock()) {
                 Intent intent = new Intent(getApplicationContext(), GestureSelfUnlockActivity.class);
                 intent.putExtra(LOCK_PACKAGE_NAME, APP_PACKAGE_NAME);
                 intent.putExtra(LOCK_FROM, LOCK_FROM_LOCK_MAIN_ACITVITY);

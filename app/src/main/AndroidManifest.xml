@@ -8,11 +8,11 @@
 
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="33"
+        android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="33" />
+        android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
@@ -23,7 +23,8 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -31,22 +32,26 @@
 
     <queries>
         <package android:name="com.applock.photos.videos" />
+
         <intent>
             <action android:name="android.intent.action.VIEW" />
+
             <category android:name="android.intent.category.BROWSABLE" />
         </intent>
         <intent>
             <action android:name="android.intent.action.SEND" />
+
             <data android:mimeType="text/plain" />
         </intent>
         <intent>
             <action android:name="android.intent.action.MAIN" />
+
             <category android:name="android.intent.category.LAUNCHER" />
         </intent>
     </queries>
 
     <application
-        android:name=".utils.MyApp"
+        android:name=".singletonClass.MyApplication"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -58,7 +63,18 @@
         android:theme="@style/Theme.AppLockHidePhotosVideos"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".ui.activity.StatusSaverElementActivity"
+            android:name=".ui.activity.ImageIntruderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.CalculatorLockActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.MainSettingsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ThemesActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -84,9 +100,11 @@
 
         <activity
             android:name=".ui.activity.SplashActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -99,28 +117,78 @@
             android:screenOrientation="portrait"
             android:theme="@style/unlock_activity_style" />
         <activity
-            android:name="com.applock.photos.videos.ui.activity.CreatePwdActivity"
+            android:name=".ui.activity.CreatePwdActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.applock.photos.videos.ui.activity.GestureSelfUnlockActivity"
+            android:name=".ui.activity.GestureSelfUnlockActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.FullImageActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.PlayerActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.DownloaderActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".downloaderUtil.activity.GetLinkThroughWebView"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".downloaderUtil.activity.InstagramLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".downloaderUtil.activity.TikTokDownloadCloudBypassWebview_method_2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".downloaderUtil.activity.TikTokDownloadCloudBypassWebview_method_3"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".downloaderUtil.activity.TikTokDownloadCloudBypassWebview_method_4"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".downloaderUtil.activity.TikTokDownloadCloudBypassWebview_method_5"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".downloaderUtil.activity.TikTokDownloadCloudBypassWebview_method_6"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".downloaderUtil.activity.TikTokDownloadCloudBypassWebview_method_7"
+            android:screenOrientation="portrait" />
+
+        <receiver android:name=".downloaderUtil.service.DownloadBroadcastReceiver" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
 
         <service
             android:name=".service.LoadAppListService"
             android:enabled="true"
-            android:stopWithTask="false"
-            android:exported="false" />
+            android:exported="false"
+            android:stopWithTask="false" />
         <service
             android:name=".service.LockService"
             android:enabled="true"
-            android:stopWithTask="false"
-            android:exported="false" />
+            android:exported="false"
+            android:stopWithTask="false" />
+        <service android:name="com.applock.photos.videos.service.CameraService" />
 
         <receiver
             android:name=".service.BootBroadcastReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </receiver>

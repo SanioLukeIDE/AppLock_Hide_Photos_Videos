@@ -2,6 +2,34 @@
     <string name="app_name">App Lock: Hide Photos &amp; Videos</string>
     <string name="title1">App Lock</string>
 
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="tmc_part_1">The application is notifying you to the presence of an app that provides several services that are essential information for safer and more efficient use. \n</string>
+    <string name="tmc_text_1">By pressing the Accept button, I declare I have read and accepted the following condition of use.</string>
+    <string name="tmc_text_2">If we find the app is being used outside its terms of use, we may restrict access to it.</string>
+    <string name="tmc_text_3">Any type of modification to the app or its components is not allowed.</string>
+    <string name="tmc_text_4">Privacy Policy may be updated from time to time for any reason. We will notify you of any changes to our Privacy Policy by posting the new Privacy Policy here.</string>
+    <string name="tmc_text_5">We do not share any kind of your Personal Data with third parties.</string>
+    <string name="following_link">Following link :\t</string>
+    <string name="privacy_hyper"><b><u>Privacy Policy</u></b></string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="tmc_hyper"><b><u>Terms and Condition</u></b></string>
+    <string name="terms_and_condition">Terms and Condition</string>
+
+    <string name="tmc">
+Posting rules you should be taking care of before you start interaction on our website/application:
+\n
+\nAssuring you carry the rights and eligibility to post any form of content you are about to share. We never permit nudism on application/website.
+\n
+\nWe won\'t allow posting of sexually explicit content, sexually explicit text, images, or audio content depicting extreme sexual acts such as acts of posting Content that drives traffic to pornographic online services. Please note that we may make exceptions based on artistic, educational, historical, documentary, or scientific nature, or where there are other considerable benefits to the public at large.
+\n
+\nWe don\'t permit encouragement or applaud towards terrorism, formed crime scenes or hate association groups on our application/website. Attempting to sell sexual services or weapons and harmful drugs are also not permitted. We will remove reasonable threats of severity, hate arousing content/speech and the intentionally pointing of private individuals. We do not permit attacks/abuse based on skin colour, native, sex, gender, gender identity, sexual orientation, religion, disability or disease.
+\n
+\nGraphic violence is not allowed and we may remove videos or images of intense, graphic violence to make sure our application/website stays appropriate for everyone.
+\n
+\nIf anyone or any account is spotted doing the above restricted activities they can be booked and arrested for the same. If viewers spot any violations of the above rules they have the right to report the content to us by using the report feature given in our application/ website.
+    </string>
+
+
     <string name="lockscreen_access_pattern_cell_added">Cell added</string>
     <string name="lockscreen_access_pattern_start">Draw the unlock pattern</string>
     <string name="lockscreen_access_pattern_detected">Password saved</string>
@@ -77,5 +105,61 @@
     <string name="enter_valid_url">Enter Valid URL</string>
     <string name="ok">OK</string>
     <string name="getting_downloading_link">Getting Downloading Link...</string>
+
+    <string name="nodeifittakeslonger">Loading.... \nNote if it takes longer then 1 min close the app and retry, if video or audio dose not play automatically then click on the play button</string>
+    <string name="somthing">Something went wrong!</string>
+    <string name="snapchatstory">SnapChat Story Downloader</string>
+    <string name="genarating_download_link">Generating download link</string>
+    <string name="error_occ">Error occurred!</string>
+    <string name="yourdoncomple">Your Download Is Completed</string>
+    <string name="downloading_des">Downloading</string>
+    <string name="don_start">Downloading Start!</string>
+    <string name="cancel">Cancel</string>
+    <string name="somthing_webiste_panele_block">Website is blocked from Server Due to maintenance, please be patient…</string>
+    <string name="title">Title</string>
+    <string name="duration">Duration</string>
+    <string name="description_goes_here">Description Goes Here</string>
+    <string name="select_quality">Select Quality</string>
+    <string name="hdlink">HD link</string>
+    <string name="sdlink">SD link</string>
+    <string name="lis">Your License is Invalid Make Sure You Have Entered A Valid Purchase Code</string>
+    <string name="aio_auto">All Auto Download</string>
+    <string name="invalid_url">\nInvalid Video URL or Check Internet Connection</string>
+    <string name="logininsta">Login</string>
+    <string name="urlisprivate">This Url Is Invalid Or Private Try After Logging In The App</string>
+    <string name="enter_valid">Please Enter a valid URI</string>
+    <string name="facebook">Facebook</string>
+    <string name="instagram">Instagram</string>
+    <string name="vimeo">Vimeo</string>
+    <string name="dailymotion">Dailymotion</string>
+    <string name="tiktok">TikTok</string>
+    <string name="snapchat">Snapchat</string>
+    <string name="twitter">Twitter</string>
+    <string name="pinterest">Pinterest</string>
+    <string name="past_url_here">Paste link here..</string>
+    <string name="paste_link">Paste Link</string>
+    <string name="how_to_download">How To Download</string>
+    <string name="change_password"><u>Change Password</u></string>
+    <string name="logintoinstatitle">Login To SocialI</string>
+    <string name="select_the_desigred_methode_to_download_tiktok_try_the_other_one_if_one_dosent_work">Select the desired server to download, try the other one if one doesn\'t work</string>
+    <string name="itemunaval">ITEM UNAVAILABLE</string>
+    <string name="Selectdesiredinsta">Select the desired Server <b>Note:</b> If SocialID dose not work for you make sure you login into the app by checking the private media checkbox</string>
+    <string name="please_enter_a_valid_media_url">Please enter a valid Media URL.</string>
+    <string name="please_enter_a_valid_url">Please enter a valid URL.</string>
+    <string name="please_enter_a_valid">"Please enter a valid "</string>
+    <string name="media_url">" Media URL."</string>
+    <string name="calculator_password">Calculator Password</string>
+    <string name="modify_password">Modify Password</string>
+    <string name="give_us_5_stars">Give Us 5 Stars</string>
+    <string name="share_app_to_friend">Share App to Friend</string>
+    <string name="calculator">Calculator</string>
+    <string name="enter_1234_then_click_the_to_unlock">Enter “1234”, then click the “=” to unlock</string>
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="enter_your_password">Enter your Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="failed_unlock_attempts_limit">Failed unlock attempts limit</string>
+    <string name="detect_break_in_unlock">Detect break-in unlock</string>
+    <string name="detect_break_desc">Capture photo if the device gets \nunlocked after reaching the limit</string>
+    <string name="image_intruder">Image Intruder</string>
 
 </resources>

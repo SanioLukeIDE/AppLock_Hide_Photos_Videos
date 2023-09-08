@@ -23,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.applock.photos.videos.R;
@@ -32,11 +31,11 @@ import com.applock.photos.videos.libs.LockPatternUtils;
 import com.applock.photos.videos.libs.LockPatternView;
 import com.applock.photos.videos.libs.LockPatternViewPattern;
 import com.applock.photos.videos.libs.UnLockMenuPopWindow;
+import com.applock.photos.videos.service.CameraService;
 import com.applock.photos.videos.service.LockService;
 import com.applock.photos.videos.utils.CommLockInfoManager;
 import com.applock.photos.videos.utils.LockUtil;
-import com.applock.photos.videos.utils.MyApp;
-import com.applock.photos.videos.utils.SharePreferences;
+import com.applock.photos.videos.singletonClass.MyApplication;
 
 import java.util.List;
 
@@ -65,6 +64,7 @@ public class GestureUnlockActivity extends AppCompatActivity implements View.OnC
     private String appLabel;
 
     ActivityGestureUnlockBinding binding;
+    private int wrongBiometricCount=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +85,8 @@ public class GestureUnlockActivity extends AppCompatActivity implements View.OnC
         pkgName = getIntent().getStringExtra(LOCK_PACKAGE_NAME);
         actionFrom = getIntent().getStringExtra(LOCK_FROM);
         packageManager = getPackageManager();
+
+        binding.unlockLayout.setBackgroundResource(MyApplication.getPreferences().getLockBackground());
 
         mLockInfoManager = new CommLockInfoManager(this);
         mPopWindow = new UnLockMenuPopWindow(this, pkgName, true);
@@ -145,8 +147,8 @@ public class GestureUnlockActivity extends AppCompatActivity implements View.OnC
                         startActivity(new Intent(GestureUnlockActivity.this, MainActivity.class));
                         finish();
                     } else {
-                        MyApp.getPreferences().putLong(LOCK_CURR_MILLISENCONS, System.currentTimeMillis());
-                        MyApp.getPreferences().putString(LOCK_LAST_LOAD_PKG_NAME, pkgName);
+                        MyApplication.getPreferences().putLong(LOCK_CURR_MILLISENCONS, System.currentTimeMillis());
+                        MyApplication.getPreferences().putString(LOCK_LAST_LOAD_PKG_NAME, pkgName);
 
                         Intent intent = new Intent(LockService.UNLOCK_ACTION);
                         intent.putExtra(LockService.LOCK_SERVICE_LASTTIME, System.currentTimeMillis());
@@ -157,7 +159,16 @@ public class GestureUnlockActivity extends AppCompatActivity implements View.OnC
                         finish();
                     }
                 } else {
+                    wrongBiometricCount++;
                     mLockPatternView.setDisplayMode(LockPatternView.DisplayMode.Wrong);
+
+                    if (MyApplication.getPreferences().getAttemptFailedCount() == wrongBiometricCount){
+                        if (MyApplication.getPreferences().isIntruderDetectorOnOff()){
+                            startService(new Intent(getApplicationContext(), CameraService.class));
+                            wrongBiometricCount = 0;
+                        }
+                    }
+
                     if (pattern.size() >= LockPatternUtils.MIN_PATTERN_REGISTER_FAIL) {
                         mFailedPatternAttemptsSinceLastTimeout++;
                         int retry = LockPatternUtils.FAILED_ATTEMPTS_BEFORE_TIMEOUT - mFailedPatternAttemptsSinceLastTimeout;

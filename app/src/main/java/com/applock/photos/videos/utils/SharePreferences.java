@@ -2,6 +2,7 @@ package com.applock.photos.videos.utils;
 
 import static com.applock.photos.videos.utils.Const.FAVORITE_APPS_LIST;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -737,6 +738,14 @@ public class SharePreferences {
         return getString("imgURL");
     }
 
+    public void setLockBackground(int drawable) {
+        putInt("LockBackground", drawable);
+    }
+
+    public int getLockBackground() {
+        return getInt("LockBackground");
+    }
+
     public boolean getBoolean(String key, boolean bool) {
         return preferences.getBoolean(key, bool);
     }
@@ -746,4 +755,31 @@ public class SharePreferences {
     }
 
 
+    public boolean isCalculatorLock() {
+        return getBoolean("CalculatorLock", true);
+    }
+    public void setCalculatorLock(boolean value) {
+        putBoolean("CalculatorLock", value);
+    }
+    public boolean isIntruderDetectorOnOff() {
+        return getBoolean("IntruderDetectorOnOff", true);
+    }
+    public void setIntruderDetectorOnOff(boolean value) {
+        putBoolean("IntruderDetectorOnOff", value);
+    }
+
+    public void setCalculatorLockPassword(String value) {
+        putString("CalculatorLockPassword", value);
+    }
+    public String getCalculatorLockPassword() {
+        return getCustomString("CalculatorLockPassword", "1234");
+    }
+
+    public int getAttemptFailedCount() {
+        return preferences.getInt("AttemptFailedCount", 2);
+    }
+
+    public void setAttemptFailedCount(int count) {
+        putInt("AttemptFailedCount", count);
+    }
 }

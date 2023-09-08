@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CustomView">
+        <attr name="adType" format="string">
+    <!--        <enum name="small" value="small"/>
+            <enum name="medium" value="medium"/>
+            <enum name="full" value="full"/>-->
+        </attr>
+        <attr name="placeholder" format="reference" />
+        <attr name="borderColor" format="integer|color" />
+    </declare-styleable>
+</resources>

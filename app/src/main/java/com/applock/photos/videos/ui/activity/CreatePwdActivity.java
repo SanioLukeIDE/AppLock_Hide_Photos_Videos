@@ -1,10 +1,8 @@
 package com.applock.photos.videos.ui.activity;
 
-import static com.applock.photos.videos.utils.Const.LOCK_IS_FIRST_LOCK;
 import static com.applock.photos.videos.utils.Const.LOCK_STATE;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -22,7 +20,6 @@ import com.applock.photos.videos.model.LockStage;
 import com.applock.photos.videos.service.LockService;
 import com.applock.photos.videos.ui.ext.GestureCreateContract;
 import com.applock.photos.videos.ui.ext.GestureCreatePresenter;
-import com.applock.photos.videos.utils.MyApp;
 import com.applock.photos.videos.utils.SharePreferences;
 import com.applock.photos.videos.utils.SystemBarHelper;
 

@@ -30,7 +30,6 @@ import android.view.View;
 import com.applock.photos.videos.R;
 import com.applock.photos.videos.databinding.ActivityMainBinding;
 import com.applock.photos.videos.databinding.DialogPermissionBinding;
-import com.applock.photos.videos.service.BootBroadcastReceiver;
 import com.applock.photos.videos.service.LoadAppListService;
 import com.applock.photos.videos.service.LockService;
 import com.applock.photos.videos.ui.fragments.BiometricLockFragment;
@@ -39,7 +38,7 @@ import com.applock.photos.videos.ui.fragments.HomeFragment;
 import com.applock.photos.videos.ui.fragments.StatusSaverFragment;
 import com.applock.photos.videos.ui.fragments.VaultFragment;
 import com.applock.photos.videos.utils.LockUtil;
-import com.applock.photos.videos.utils.MyApp;
+import com.applock.photos.videos.singletonClass.MyApplication;
 import com.applock.photos.videos.utils.SharePreferences;
 
 public class MainActivity extends AppCompatActivity {
@@ -93,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CHANGE_COMPONENT_ENABLED_STATE) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MainActivity.this, new String[] { Manifest.permission.CHANGE_COMPONENT_ENABLED_STATE, Manifest.permission.SYSTEM_ALERT_WINDOW }, 11);
         }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (!Environment.isExternalStorageManager()) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
@@ -105,6 +107,9 @@ public class MainActivity extends AppCompatActivity {
         toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close);
         binding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        if (MyApplication.getPreferences().getLockBackground() == 0)
+            MyApplication.getPreferences().setLockBackground(R.drawable.theme1);
 
     }
 
@@ -121,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
          startService(new Intent(this, LoadAppListService.class));
-        if (MyApp.getPreferences().getFBoolean(LOCK_STATE)) {
+        if (MyApplication.getPreferences().getFBoolean(LOCK_STATE)) {
             /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(new Intent(getApplicationContext(), LockService.class));
             } else*/ startService(new Intent(getApplicationContext(), LockService.class));
@@ -150,18 +155,22 @@ public class MainActivity extends AppCompatActivity {
         binding.rdGroup.setOnCheckedChangeListener((radioGroup, i) -> {
             switch (i) {
                 case R.id.rd_app_lock:
+                    val = 0;
                     startAppLock();
                     break;
 
                 case R.id.rd_vault:
+                    val = 1;
                     initVault();
                     break;
 
                 case R.id.rd_status_saver:
+                    val = 2;
                     startStatusSaver();
                     break;
 
                 case R.id.rd_hide_apps:
+                    val = 3;
                     startHideApps();
                     break;
 
@@ -239,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startStatusSaver() {
+        binding.rdStatusSaver.setChecked(true);
         startFragment(new StatusSaverFragment());
 
         binding.rdAppLock.setText("");
@@ -246,18 +256,15 @@ public class MainActivity extends AppCompatActivity {
         binding.rdStatusSaver.setText("Status Saver");
         binding.rdHideApps.setText("");
 
-        binding.rdStatusSaver.setChecked(true);
-
     }
 
     public void startHideApps() {
+        binding.rdHideApps.setChecked(true);
         startFragment(new HideAppsFragment());
         binding.rdAppLock.setText("");
         binding.rdVault.setText("");
         binding.rdStatusSaver.setText("");
         binding.rdHideApps.setText("Hide");
-
-        binding.rdHideApps.setChecked(true);
 
     }
 

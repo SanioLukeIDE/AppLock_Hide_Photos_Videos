@@ -1,8 +1,6 @@
 package com.applock.photos.videos.ui.activity;
 
 import static com.applock.photos.videos.utils.Utility.getAllDisableApps;
-import static com.applock.photos.videos.utils.Utility.hideApp;
-import static com.applock.photos.videos.utils.Utility.hideUnHideApps;
 import static com.applock.photos.videos.utils.Utility.unHideApp;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,18 +16,19 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import com.applock.photos.videos.R;
 import com.applock.photos.videos.adapter.AppHIdeAdapter;
-import com.applock.photos.videos.adapter.AppLockAdapter;
 import com.applock.photos.videos.adapter.ContentAdapter;
 import com.applock.photos.videos.databinding.ActivityHiddenImagesBinding;
 import com.applock.photos.videos.databinding.DialogHideAppBinding;
 import com.applock.photos.videos.interfaces.AppsClickedInterface;
 import com.applock.photos.videos.model.AppsModel;
 import com.applock.photos.videos.model.CommLockInfo;
+import com.applock.photos.videos.utils.BiometricUtils;
+import com.applock.photos.videos.singletonClass.MyApplication;
 import com.applock.photos.videos.utils.SharePreferences;
+import com.applock.photos.videos.utils.Utility;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -54,8 +53,7 @@ public class HiddenImagesActivity extends AppCompatActivity implements AppsClick
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        Utility.finishActivity(this);
     }
 
     @Override
@@ -119,20 +117,30 @@ public class HiddenImagesActivity extends AppCompatActivity implements AppsClick
         appBinding.tvDesc.setText("Import "+model.getAppName()+" App and Unhide the application.");
 
         appBinding.btnHide.setOnClickListener(view -> {
-            try {
-                unHideApp(getApplicationContext(), model.getComponentName());
-            } catch (Exception e) {
-                Intent intent = new Intent();
-                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", model.getPackageName(), null);
-                intent.setData(uri);
-                startActivity(intent);
+            if (MyApplication.getPreferences().isCalculatorLock()){
+                startActivity(new Intent(getApplicationContext(), CalculatorLockActivity.class).putExtra("isHide", false)
+                        .putExtra("package", model.getPackageName())
+                        .putExtra("name", model.getComponentName()));
+                dialog.dismiss();
+//                activity.startHideApps();
+            } else {
+                new BiometricUtils(this, isAuthenticate -> {
+                    try {
+                        unHideApp(getApplicationContext(), model.getComponentName());
+                    } catch (Exception e) {
+                        Intent intent = new Intent();
+                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", model.getPackageName(), null);
+                        intent.setData(uri);
+                        startActivity(intent);
+                    }
+                });
             }
-            dialog.dismiss();
 
         });
 
     }
+
 
     @Override
     public void onItemClicked(CommLockInfo model) {

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.applock.photos.videos.databinding.ViewStatusSaversListBinding;
 import com.applock.photos.videos.model.DataModel;
-import com.applock.photos.videos.ui.activity.StatusSaverElementActivity;
+import com.applock.photos.videos.ui.activity.DownloaderActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -48,7 +48,7 @@ public class StatusListAdapter extends ListAdapter<DataModel, StatusListAdapter.
         holder.binding.tvName.setText(model.getName());
 
         holder.itemView.setOnClickListener(view -> {
-            context.startActivity(new Intent(context, StatusSaverElementActivity.class)
+            context.startActivity(new Intent(context, DownloaderActivity.class)
                     .putExtra("model", model));
         });
 

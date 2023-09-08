@@ -6,12 +6,11 @@ import static com.applock.photos.videos.utils.Utility.clearRepeatCommLockInfo;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 
 import com.applock.photos.videos.model.CommLockInfo;
-import com.applock.photos.videos.model.FavoriteInfo;
+import com.applock.photos.videos.singletonClass.MyApplication;
 
 import org.litepal.crud.DataSupport;
 
@@ -66,7 +65,7 @@ public class CommLockInfoManager {
 
 
     public boolean isHasFavoriteAppInfo(String packageName) {
-        List<String> list = MyApp.getPreferences().getFavoriteApps();
+        List<String> list = MyApplication.getPreferences().getFavoriteApps();
         for (String name : list){
             if (packageName.equals(name))
                 return true;

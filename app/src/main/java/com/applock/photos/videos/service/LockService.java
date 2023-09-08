@@ -11,13 +11,11 @@ import static com.applock.photos.videos.utils.Const.LOCK_LAST_LOAD_PKG_NAME;
 import static com.applock.photos.videos.utils.Const.LOCK_PACKAGE_NAME;
 import static com.applock.photos.videos.utils.Const.LOCK_STATE;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.Service;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.BroadcastReceiver;
@@ -27,7 +25,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
 
@@ -37,7 +34,7 @@ import androidx.core.app.NotificationCompat;
 import com.applock.photos.videos.R;
 import com.applock.photos.videos.ui.activity.GestureUnlockActivity;
 import com.applock.photos.videos.utils.CommLockInfoManager;
-import com.applock.photos.videos.utils.MyApp;
+import com.applock.photos.videos.singletonClass.MyApplication;
 import com.applock.photos.videos.utils.SharePreferences;
 
 import java.util.ArrayList;
@@ -290,7 +287,7 @@ public class LockService extends IntentService {
     }
 
     private void passwordLock(String packageName) {
-        MyApp.getInstance().clearAllActivity();
+        MyApplication.getInstance().clearAllActivity();
 
         Intent intent = new Intent(this, GestureUnlockActivity.class);
 

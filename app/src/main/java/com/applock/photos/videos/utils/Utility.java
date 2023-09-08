@@ -9,6 +9,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -18,37 +20,71 @@ import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import com.applock.photos.videos.BuildConfig;
+import com.applock.photos.videos.R;
 import com.applock.photos.videos.model.AppsModel;
 import com.applock.photos.videos.model.CommLockInfo;
 import com.applock.photos.videos.model.ImageFolder;
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
+import com.google.android.gms.tasks.Task;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class Utility {
 
-    public static void hideApp(Context context, ComponentName componentName) {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
-            context.getPackageManager().setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED, PackageManager.DONT_KILL_APP);
-        } else {
-            context.getPackageManager().setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-        }
-//        context.getPackageManager().setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+    public static void openPrivacyPolicy(Activity activity){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://invotechgirge.blogspot.com/p/privacy-policy_8.html"));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
     }
 
-    public static void unHideApp(Context context, ComponentName componentName) {
-        context.getPackageManager().setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+    public static void setToast(Context _mContext, String str) {
+        Toast toast = Toast.makeText(_mContext, str, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
     }
 
-    public static void hideUnHideApps(Context context, String packageName, boolean enabled) {
-        PackageManager pm = context.getPackageManager();
-        ComponentName componentName = new ComponentName(packageName, packageName + ".MainActivity");
-        int newState = enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
-        pm.setComponentEnabledSetting(componentName, newState, PackageManager.DONT_KILL_APP);
+    public static void reviewDialog(Activity activity){
+        ReviewManager manager = ReviewManagerFactory.create(activity);
+        Task<ReviewInfo> request = manager.requestReviewFlow();
+        request.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // We can get the ReviewInfo object
+                ReviewInfo reviewInfo = task.getResult();
+                Task<Void> flow = manager.launchReviewFlow(activity, reviewInfo);
+                flow.addOnCompleteListener(task1 -> {
+
+                });
+            } else {
+                // There was some problem, log or handle the error code.
+                Log.e("reviewDialog: ", Objects.requireNonNull(task.getException()).getLocalizedMessage());
+            }
+        });
+
+    }
+
+    public static void shareAppDialog(Activity activity){
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Looking to take your Instagram game to the next level? Look no further than " + activity.getString(R.string.app_name) + "!!\n" +
+                "With our multiple editing features you'll be able to create stunning content that will help you stand out on the platform. \n" +
+                "Download " + activity.getString(R.string.app_name) + " today and elevate your Instagram presence!\n" +
+                "\nJoin now with the link: \nhttps://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID);
+        sendIntent.setType("text/plain");
+        activity.startActivity(sendIntent);
     }
 
     public static ShimmerDrawable getShimmer() {
@@ -75,6 +111,48 @@ public class Utility {
         } else {
             activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
+    }
+
+    public static void hideApp(Context context, ComponentName componentName) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+            context.getPackageManager().setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED, PackageManager.DONT_KILL_APP);
+        } else {
+            context.getPackageManager().setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+        }
+//        context.getPackageManager().setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+    }
+
+    public static void nextActivity(Activity activity, Class<?> className, boolean... isFinish) {
+//        AdUtils.showInterstitialAd(Constants.adsResponseModel.getInterstitial_ads().getAdx(), activity, isLoaded -> {
+            if (isFinish[0]) {
+                activity.startActivity(new Intent(activity, className).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                activity.finish();
+            } else
+                activity.startActivity(new Intent(activity, className).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+//        });
+    }
+
+    public static void nextDataActivity(Activity activity, Class<?> className, Object... data) {
+//        AdUtils.showInterstitialAd(Constants.adsResponseModel.getInterstitial_ads().getAdx(), activity, isLoaded -> {
+            activity.startActivity(new Intent(activity, className).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("data", data));
+//        });
+    }
+
+    public static void finishActivity(Activity activity) {
+//        AdUtils.showBackPressAds(activity, Constants.adsResponseModel.getApp_open_ads().getAdx(), isLoaded -> {
+            activity.finish();
+//        });
+    }
+
+    public static void unHideApp(Context context, ComponentName componentName) {
+        context.getPackageManager().setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+    }
+
+    public static void hideUnHideApps(Context context, String packageName, boolean enabled) {
+        PackageManager pm = context.getPackageManager();
+        ComponentName componentName = new ComponentName(packageName, packageName + ".MainActivity");
+        int newState = enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+        pm.setComponentEnabledSetting(componentName, newState, PackageManager.DONT_KILL_APP);
     }
 
     public static ArrayList<ImageFolder> getAllVideoFolders(Context context) {
@@ -124,12 +202,6 @@ public class Utility {
         } else {
             setToast(context,"App Not Available.");
         }
-    }
-
-    public static void setToast(Context _mContext, String str) {
-        Toast toast = Toast.makeText(_mContext, str, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
     }
 
     public static List<CommLockInfo> clearRepeatCommLockInfo(List<CommLockInfo> lockInfos) {
@@ -190,17 +262,17 @@ public class Utility {
 
             String className = resolveInfo.activityInfo.name;
 
-            Log.e(label, label+" --> getAllInstalledApps: ---> "+packageName+ "     "+className);
-
            for (String s : preferences.getHideApps()){
                if (packageName.equals(s)){
                    preferences.removeHideApps(packageName);
                }
            }
 
-            AppsModel model = new AppsModel(label, packageName, icon);
-            model.setClassName(className);
-            list.add(model);
+           if (!context.getPackageName().equals(packageName)){
+               AppsModel model = new AppsModel(label, packageName, icon);
+               model.setClassName(className);
+               list.add(model);
+           }
 
         }
 
@@ -219,6 +291,7 @@ public class Utility {
             return false;
         }
     }
+
 
     public static ArrayList<ImageFolder> getAllImageFolders(Context context) {
         ArrayList<ImageFolder> imageFolders = new ArrayList<>();
@@ -264,6 +337,43 @@ public class Utility {
 
         imageFolders.addAll(folderMap.values());
         return imageFolders;
+    }
+
+    public static LiveData<List<String>> getAllImagesFromFolderPath(String folderPath) {
+        MutableLiveData<List<String>> data = new MutableLiveData<>();
+        List<String> imagePaths = new ArrayList<>();
+
+//        String folderPath = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS) + directoryInstaShoryDirectorydownload_images;
+
+        File folder = new File(folderPath);
+        if (folder.exists() && folder.isDirectory()) {
+            File[] files = folder.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile() && isImageFile(file.getName())) {
+                        String imagePath = file.getAbsolutePath();
+                        imagePaths.add(imagePath);
+                    }
+                }
+            }
+        }
+
+        AsyncTask.execute(() -> data.postValue(imagePaths));
+
+        return data;
+    }
+
+    public static boolean isImageFile(String fileName) {
+        String extension = getFileExtension(fileName);
+        return extension != null && (extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("jpeg") || extension.equalsIgnoreCase("png") || extension.equalsIgnoreCase("gif") || extension.equalsIgnoreCase("bmp"));
+    }
+
+    private static String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex != -1 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(dotIndex + 1).toLowerCase();
+        }
+        return null;
     }
 
 
