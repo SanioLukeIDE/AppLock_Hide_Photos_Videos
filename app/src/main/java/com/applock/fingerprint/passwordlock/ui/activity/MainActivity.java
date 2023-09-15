@@ -2,6 +2,7 @@ package com.applock.fingerprint.passwordlock.ui.activity;
 
 import static com.applock.fingerprint.passwordlock.utils.Const.LOCK_STATE;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.content.Context;
@@ -20,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.adsmodule.api.adsModule.AdUtils;
 import com.adsmodule.api.adsModule.interfaces.AppInterfaces;
@@ -27,10 +30,10 @@ import com.adsmodule.api.adsModule.utils.Constants;
 import com.applock.fingerprint.passwordlock.R;
 import com.applock.fingerprint.passwordlock.databinding.ActivityMainBinding;
 import com.applock.fingerprint.passwordlock.databinding.DialogPermissionBinding;
-import com.applock.fingerprint.passwordlock.service.AppLaunchReceiver;
 import com.applock.fingerprint.passwordlock.service.LoadAppListService;
 import com.applock.fingerprint.passwordlock.service.LockService;
 import com.applock.fingerprint.passwordlock.singletonClass.MyApplication;
+import com.applock.fingerprint.passwordlock.ui.ext.BackupWorker;
 import com.applock.fingerprint.passwordlock.ui.fragments.BiometricLockFragment;
 import com.applock.fingerprint.passwordlock.ui.fragments.HideAppsFragment;
 import com.applock.fingerprint.passwordlock.ui.fragments.HomeFragment;
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     ActionBarDrawerToggle toggle;
     int val;
     SharePreferences preferences;
+
 
     public void requestPermissions() {
         if (!Settings.System.canWrite(this)) {
@@ -73,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
         val = getIntent().getIntExtra("val", 0);
 
-//        requestPermissions();
         preferences = new SharePreferences(getApplicationContext());
 
         toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close);
@@ -89,12 +91,22 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         MyApplication.getPreferences().setFirstRun(false);
-        // Check if the overlay permission is not already granted
         if (!Settings.canDrawOverlays(this)) {
-            // If not granted, request the permission
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + getPackageName()));
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, 11);
+        }
+
+        startService(new Intent(this, LoadAppListService.class));
+        if (MyApplication.getPreferences().getFBoolean(LOCK_STATE)) {
+            Intent serviceIntent = new Intent(getApplicationContext(), LockService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(BackupWorker.class).addTag("BACKUP_WORKER_TAG").build();
+                WorkManager.getInstance(getApplicationContext()).enqueue(request);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(serviceIntent);
+            } else {
+                startService(serviceIntent);
+            }
         }
 
         if (MyApplication.getPreferences().getLockBackground() == null)
@@ -126,15 +138,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        startService(new Intent(this, LoadAppListService.class));
-        startService(new Intent(this, AppLaunchReceiver.class));
-        if (MyApplication.getPreferences().getFBoolean(LOCK_STATE)) {
-            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(new Intent(getApplicationContext(), LockService.class));
-            } else*/
-            startService(new Intent(getApplicationContext(), LockService.class));
-        }
 
         if (preferences.isFirstLock()) {
             showDialog();
@@ -249,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
                 binding.rdGroup.setVisibility(View.VISIBLE);
             }
         });
-
 
 
     }

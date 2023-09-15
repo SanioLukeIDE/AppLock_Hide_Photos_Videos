@@ -97,6 +97,10 @@ public class CommLockInfoManager {
         return false;
     }
 
+    public CommLockInfo getAppInfo(String packageName){
+        return DataSupport.where("packageName = ?", packageName).findFirst(CommLockInfo.class);
+    }
+
     public boolean isLockedPackageName(String packageName) {
         List<CommLockInfo> lockInfos = DataSupport.where("packageName = ?", packageName).find(CommLockInfo.class);
         for (CommLockInfo commLockInfo : lockInfos) {

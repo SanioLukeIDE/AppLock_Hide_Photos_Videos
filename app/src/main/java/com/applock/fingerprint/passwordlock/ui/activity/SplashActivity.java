@@ -11,10 +11,13 @@ import static com.applock.fingerprint.passwordlock.utils.Utility.setFullScreen;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.adsmodule.api.adsModule.AdUtils;
 import com.adsmodule.api.adsModule.retrofit.AdsDataRequestModel;
@@ -23,6 +26,7 @@ import com.applock.fingerprint.passwordlock.R;
 import com.applock.fingerprint.passwordlock.service.LoadAppListService;
 import com.applock.fingerprint.passwordlock.service.LockService;
 import com.applock.fingerprint.passwordlock.singletonClass.MyApplication;
+import com.applock.fingerprint.passwordlock.ui.ext.BackupWorker;
 import com.applock.fingerprint.passwordlock.utils.Utility;
 
 @SuppressLint("CustomSplashScreen")
@@ -34,9 +38,17 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         setFullScreen(this);
 
-        startService(new Intent(getApplicationContext(), LoadAppListService.class));
+        startService(new Intent(this, LoadAppListService.class));
         if (MyApplication.getPreferences().getFBoolean(LOCK_STATE)) {
-            startService(new Intent(getApplicationContext(), LockService.class));
+            Intent serviceIntent = new Intent(getApplicationContext(), LockService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(BackupWorker.class).addTag("BACKUP_WORKER_TAG").build();
+                WorkManager.getInstance(getApplicationContext()).enqueue(request);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(serviceIntent);
+            } else {
+                startService(serviceIntent);
+            }
         }
 
         if (Utility.isInternetConnected(getApplicationContext())) {

@@ -2,8 +2,6 @@ package com.applock.fingerprint.passwordlock.ui.activity;
 
 import static com.applock.fingerprint.passwordlock.utils.Const.LOCK_CURR_MILLISENCONS;
 import static com.applock.fingerprint.passwordlock.utils.Const.LOCK_FROM;
-import static com.applock.fingerprint.passwordlock.utils.Const.LOCK_FROM_FINISH;
-import static com.applock.fingerprint.passwordlock.utils.Const.LOCK_FROM_LOCK_MAIN_ACITVITY;
 import static com.applock.fingerprint.passwordlock.utils.Const.LOCK_LAST_LOAD_PKG_NAME;
 import static com.applock.fingerprint.passwordlock.utils.Const.LOCK_PACKAGE_NAME;
 import static com.applock.fingerprint.passwordlock.utils.SharePreferences.isNonNull;
@@ -37,12 +35,12 @@ import com.applock.fingerprint.passwordlock.libs.LockPatternUtils;
 import com.applock.fingerprint.passwordlock.libs.LockPatternView;
 import com.applock.fingerprint.passwordlock.libs.LockPatternViewPattern;
 import com.applock.fingerprint.passwordlock.libs.UnLockMenuPopWindow;
+import com.applock.fingerprint.passwordlock.model.CommLockInfo;
 import com.applock.fingerprint.passwordlock.service.CameraService;
 import com.applock.fingerprint.passwordlock.service.LockService;
+import com.applock.fingerprint.passwordlock.singletonClass.MyApplication;
 import com.applock.fingerprint.passwordlock.utils.CommLockInfoManager;
 import com.applock.fingerprint.passwordlock.utils.LockUtil;
-import com.applock.fingerprint.passwordlock.singletonClass.MyApplication;
-import com.applock.fingerprint.passwordlock.utils.Utility;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -52,12 +50,13 @@ import java.util.List;
 
 public class GestureUnlockActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static final String FINISH_UNLOCK_THIS_APP = "finish_unlock_this_app";
+    ActivityGestureUnlockBinding binding;
     private ImageView mIconMore;
     private LockPatternView mLockPatternView;
     private ImageView mUnLockIcon, mBgLayout, mAppLogo;
     private TextView mUnLockText, mUnlockFailTip, mAppLabel;
     private RelativeLayout mUnLockLayout;
-
     private PackageManager packageManager;
     private String pkgName;
     private String actionFrom;
@@ -68,11 +67,14 @@ public class GestureUnlockActivity extends AppCompatActivity implements View.OnC
     private LockPatternViewPattern mPatternViewPattern;
     private GestureUnlockReceiver mGestureUnlockReceiver;
     private ApplicationInfo appInfo;
-    public static final String FINISH_UNLOCK_THIS_APP = "finish_unlock_this_app";
     private Drawable iconDrawable;
     private String appLabel;
-    ActivityGestureUnlockBinding binding;
-    private int wrongBiometricCount=0;
+    private int wrongBiometricCount = 0;
+    private Runnable mClearPatternRunnable = new Runnable() {
+        public void run() {
+            mLockPatternView.clearPattern();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,12 +129,13 @@ public class GestureUnlockActivity extends AppCompatActivity implements View.OnC
 
     private void initLayoutBackground() {
         try {
+            CommLockInfo lockInfo = mLockInfoManager.getAppInfo(pkgName);
             appInfo = packageManager.getApplicationInfo(pkgName, PackageManager.GET_UNINSTALLED_PACKAGES);
-            if (appInfo != null) {
+            if (lockInfo != null) {
                 iconDrawable = packageManager.getApplicationIcon(appInfo);
                 appLabel = packageManager.getApplicationLabel(appInfo).toString();
                 mUnLockIcon.setImageDrawable(iconDrawable);
-                mUnLockText.setText(appLabel);
+                mUnLockText.setText(lockInfo.getAppName());
                 mUnlockFailTip.setText(getString(R.string.password_gestrue_tips));
                 if (isNonNull(MyApplication.getPreferences().getLockBackground())) {
                     final Drawable icon = packageManager.getApplicationIcon(appInfo);
@@ -155,7 +158,6 @@ public class GestureUnlockActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-
     private void initLockPatternView() {
         mLockPatternView.setLineColorRight(0x80ffffff);
         mLockPatternUtils = new LockPatternUtils(this);
@@ -166,39 +168,40 @@ public class GestureUnlockActivity extends AppCompatActivity implements View.OnC
             public void onPatternDetected(List<LockPatternView.Cell> pattern) {
                 if (mLockPatternUtils.checkPattern(pattern)) {
                     mLockPatternView.setDisplayMode(LockPatternView.DisplayMode.Correct);
-                    if (actionFrom.equals(LOCK_FROM_LOCK_MAIN_ACITVITY)) {
+               /*     if (actionFrom.equals(LOCK_FROM_LOCK_MAIN_ACITVITY)) {
                         startActivity(new Intent(GestureUnlockActivity.this, MainActivity.class));
                         finish();
-                    } else {
-                        MyApplication.getPreferences().putLong(LOCK_CURR_MILLISENCONS, System.currentTimeMillis());
-                        MyApplication.getPreferences().putString(LOCK_LAST_LOAD_PKG_NAME, pkgName);
+                    } else {*/
+                    MyApplication.getPreferences().putLong(LOCK_CURR_MILLISENCONS, System.currentTimeMillis());
+                    MyApplication.getPreferences().putString(LOCK_LAST_LOAD_PKG_NAME, pkgName);
 
-                        try {
-                            Intent intent = getPackageManager().getLaunchIntentForPackage(pkgName);
-                            if (intent != null) {
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(GestureUnlockActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                    mLockInfoManager.unlockCommApplication(pkgName);
+
+                    Intent broadIntent = new Intent(LockService.UNLOCK_ACTION);
+                    broadIntent.putExtra(LockService.LOCK_SERVICE_LASTTIME, System.currentTimeMillis());
+                    broadIntent.putExtra(LockService.LOCK_SERVICE_LASTAPP, pkgName);
+                    sendBroadcast(broadIntent);
+
+                    try {
+                        Intent intent = getPackageManager().getLaunchIntentForPackage(pkgName);
+                        if (intent != null) {
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(GestureUnlockActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                         }
-
-                        Intent intent = new Intent(LockService.UNLOCK_ACTION);
-                        intent.putExtra(LockService.LOCK_SERVICE_LASTTIME, System.currentTimeMillis());
-                        intent.putExtra(LockService.LOCK_SERVICE_LASTAPP, pkgName);
-                        sendBroadcast(intent);
-
-                        mLockInfoManager.unlockCommApplication(pkgName);
-                        finish();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+
+                    finish();
+//                    }
                 } else {
                     wrongBiometricCount++;
                     mLockPatternView.setDisplayMode(LockPatternView.DisplayMode.Wrong);
 
-                    if (MyApplication.getPreferences().getAttemptFailedCount() == wrongBiometricCount){
-                        if (MyApplication.getPreferences().isIntruderDetectorOnOff()){
+                    if (MyApplication.getPreferences().getAttemptFailedCount() == wrongBiometricCount) {
+                        if (MyApplication.getPreferences().isIntruderDetectorOnOff()) {
                             startService(new Intent(getApplicationContext(), CameraService.class));
                             wrongBiometricCount = 0;
                         }
@@ -207,9 +210,7 @@ public class GestureUnlockActivity extends AppCompatActivity implements View.OnC
                     if (pattern.size() >= LockPatternUtils.MIN_PATTERN_REGISTER_FAIL) {
                         mFailedPatternAttemptsSinceLastTimeout++;
                         int retry = LockPatternUtils.FAILED_ATTEMPTS_BEFORE_TIMEOUT - mFailedPatternAttemptsSinceLastTimeout;
-                        if (retry >= 0) {
 
-                        }
                     }
 
                     if (mFailedPatternAttemptsSinceLastTimeout >= 3) {
@@ -227,21 +228,15 @@ public class GestureUnlockActivity extends AppCompatActivity implements View.OnC
         mLockPatternView.setTactileFeedbackEnabled(true);
     }
 
-    private Runnable mClearPatternRunnable = new Runnable() {
-        public void run() {
-            mLockPatternView.clearPattern();
-        }
-    };
-
     @Override
     public void onBackPressed() {
-        if (actionFrom.equals(LOCK_FROM_FINISH)) {
+        /*if (actionFrom.equals(LOCK_FROM_FINISH)) {
             LockUtil.goHome(this);
         } else if (actionFrom.equals(LOCK_FROM_LOCK_MAIN_ACITVITY)) {
             finish();
         } else {
             startActivity(new Intent(this, MainActivity.class));
-        }
+        }*/
     }
 
 
@@ -254,6 +249,12 @@ public class GestureUnlockActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mGestureUnlockReceiver);
+    }
+
     private class GestureUnlockReceiver extends BroadcastReceiver {
 
         @Override
@@ -262,15 +263,9 @@ public class GestureUnlockActivity extends AppCompatActivity implements View.OnC
 //            if (action.equals(UnLockMenuPopWindow.UPDATE_LOCK_VIEW)) {
 //                mLockPatternView.initRes();
 //            } else
-            if (action.equals(FINISH_UNLOCK_THIS_APP)) {
+            /*if (action.equals(FINISH_UNLOCK_THIS_APP)) {
                 finish();
-            }
+            }*/
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(mGestureUnlockReceiver);
     }
 }

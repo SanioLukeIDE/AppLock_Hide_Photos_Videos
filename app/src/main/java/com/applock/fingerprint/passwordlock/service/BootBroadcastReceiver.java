@@ -7,7 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 import com.applock.fingerprint.passwordlock.singletonClass.MyApplication;
+import com.applock.fingerprint.passwordlock.ui.ext.BackupWorker;
 
 public class BootBroadcastReceiver extends BroadcastReceiver {
 
@@ -15,9 +19,15 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         context.startService(new Intent(context, LoadAppListService.class));
         if (MyApplication.getPreferences().getFBoolean(LOCK_STATE)) {
-            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(new Intent(context, LockService.class));
-            } else*/ context.startService(new Intent(context, LockService.class));
+            Intent serviceIntent = new Intent(context, LockService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(BackupWorker.class).addTag("BACKUP_WORKER_TAG").build();
+                WorkManager.getInstance(context).enqueue(request);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(serviceIntent);
+            } else {
+                context.startService(serviceIntent);
+            }
         }
     }
 }

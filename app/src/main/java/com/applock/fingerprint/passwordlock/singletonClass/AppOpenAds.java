@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -12,6 +13,7 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 
 import com.adsmodule.api.adsModule.AdUtils;
 import com.adsmodule.api.adsModule.utils.Constants;
+import com.applock.fingerprint.passwordlock.ui.activity.GestureUnlockActivity;
 import com.applock.fingerprint.passwordlock.ui.activity.SplashActivity;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.List;
 
 public class AppOpenAds implements LifecycleObserver, Application.ActivityLifecycleCallbacks {
 
+    private static final String TAG = "AppOpenAds";
     @SuppressLint("StaticFieldLeak")
     public static Activity currentActivity;
     MyApplication application;
@@ -48,9 +51,8 @@ public class AppOpenAds implements LifecycleObserver, Application.ActivityLifecy
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void onStart() {
         if (Constants.adsResponseModel != null && Constants.adsResponseModel.isShow_ads()) {
-            if (!isAdShowing && currentActivity != null && (!currentActivity.getClass().getName().equals(SplashActivity.class.getName()))) {
+            if (!isAdShowing && currentActivity != null && !(currentActivity.getComponentName().getClassName().equals(SplashActivity.class.getName()) || currentActivity.getComponentName().getClassName().equals("com.applock.fingerprint.passwordlock.ui.activity.GestureUnlockActivity"))) {
                 isAdShowing = true;
-
                 AdUtils.showAppOpenAds(Constants.adsResponseModel.getApp_open_ads().getAdx(), currentActivity, state_load -> {
                     isAdShowing = false;
                 });

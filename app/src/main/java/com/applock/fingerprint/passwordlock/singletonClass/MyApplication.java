@@ -2,6 +2,7 @@ package com.applock.fingerprint.passwordlock.singletonClass;
 
 import static com.adsmodule.api.adsModule.retrofit.APICallHandler.callAppCountApi;
 import static com.adsmodule.api.adsModule.utils.Constants.MAIN_BASE_URL;
+import static com.applock.fingerprint.passwordlock.service.LockService.CHANNEL_ID;
 import static com.applock.fingerprint.passwordlock.singletonClass.AppOpenAds.activityList;
 import static com.applock.fingerprint.passwordlock.utils.Const.LOCK_FROM;
 import static com.applock.fingerprint.passwordlock.utils.Const.LOCK_FROM_FINISH;
@@ -9,7 +10,10 @@ import static com.applock.fingerprint.passwordlock.utils.Const.LOCK_PACKAGE_NAME
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 
 import com.adsmodule.api.adsModule.preferencesManager.AppPreferences;
 import com.adsmodule.api.adsModule.retrofit.AdsDataRequestModel;
@@ -59,6 +63,20 @@ public class MyApplication extends Application {
             });
         }
         new AppOpenAds(instance);
+
+        createNotificationChannel();
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "My Service Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
     }
 
     public static SharePreferences getPreferences(){
