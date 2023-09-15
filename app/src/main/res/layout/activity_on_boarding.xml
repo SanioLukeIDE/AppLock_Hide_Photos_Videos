@@ -15,29 +15,34 @@
             android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" >
+            app:layout_constraintVertical_bias="0.5">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                />
+                android:layout_weight="1" />
 
             <LinearLayout
                 android:id="@+id/dotsLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="40dp"
-                android:orientation="horizontal"
-                />
+                android:layout_margin="24dp"
+                android:orientation="horizontal" />
+
+            <com.adsmodule.api.adsModule.interfaces.CustomView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:adType="medium"
+            />
 
         </LinearLayout>
 
@@ -50,40 +55,39 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
+            app:layout_constraintVertical_bias="0.80" />
 
         <ImageView
             android:id="@+id/next"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="80dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="80dp"
             android:src="@drawable/baseline_arrow_forward_24"
-            app:tint="@color/icon_color"
             app:layout_constraintBottom_toBottomOf="@+id/btn_next"
             app:layout_constraintEnd_toEndOf="@+id/btn_next"
-            app:layout_constraintTop_toTopOf="@+id/btn_next"
             app:layout_constraintStart_toStartOf="@id/btn_next"
-            app:layout_constraintVertical_bias="0.5"/>
+            app:layout_constraintTop_toTopOf="@+id/btn_next"
+            app:layout_constraintVertical_bias="0.5"
+            app:tint="@color/icon_color" />
 
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/tv_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start"
-            android:textStyle="bold"
-            android:layout_marginTop="80dp"
             android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="80dp"
+            android:text="Start"
             android:textColor="@color/icon_color"
             android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/btn_next"
             app:layout_constraintEnd_toEndOf="@+id/btn_next"
-            app:layout_constraintTop_toTopOf="@+id/btn_next"
             app:layout_constraintStart_toStartOf="@id/btn_next"
-            app:layout_constraintVertical_bias="0.5"/>
-
+            app:layout_constraintTop_toTopOf="@+id/btn_next"
+            app:layout_constraintVertical_bias="0.5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

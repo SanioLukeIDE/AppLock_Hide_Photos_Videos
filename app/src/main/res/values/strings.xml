@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">App Lock: Hide Photos &amp; Videos</string>
     <string name="title1">App Lock</string>
+    <string name="default_theme">https://raw.githubusercontent.com/brijesh-ide/AppLock_Hide_Photos_Videos/master/themes/wallpaper/ABSTRACT/pexels-photo-1029611.webp</string>
 
     <string name="terms_of_use">Terms of Use</string>
     <string name="tmc_part_1">The application is notifying you to the presence of an app that provides several services that are essential information for safer and more efficient use. \n</string>
@@ -14,6 +15,7 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="tmc_hyper"><b><u>Terms and Condition</u></b></string>
     <string name="terms_and_condition">Terms and Condition</string>
+    <string name="tmc_desc_click">You can find out more information by clicking on the</string>
 
     <string name="tmc">
 Posting rules you should be taking care of before you start interaction on our website/application:
@@ -29,6 +31,27 @@ Posting rules you should be taking care of before you start interaction on our w
 \nIf anyone or any account is spotted doing the above restricted activities they can be booked and arrested for the same. If viewers spot any violations of the above rules they have the right to report the content to us by using the report feature given in our application/ website.
     </string>
 
+    <string name="rate_us_1">Rate us!</string>
+    <string name="do_you_want_to_really_exit">Do you want to really exit?</string>
+    <string name="exit">Exit</string>
+
+    <string name="permission_required">Permission Required</string>
+    <string name="external_storage">External Storage</string>
+    <string name="allow_to_access_photos_and_media_on_your_device">Allow to access photos and media on your device.</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="please_grant_the_requested_permissions">Please grant the requested permissions.</string>
+
+    <string name="no_result_found">No result found</string>
+    <string name="grant_whatsapp_business_permission">Grant WhatsApp Business Permission</string>
+    <string name="appnotinstalled">WhatsApp Is Not Installed Kindly Install It</string>
+    <string name="yes">Yes</string>
+    <string name="pernecessory">Permission necessary</string>
+    <string name="write_neesory">Write Storage permission is necessary to Download Images and Videos!!!</string>
+    <string name="preview_not">Preview Not available</string>
+    <string name="somth_video_wrong">Something went wrong while playing video! Please try again</string>
+    <string name="saved_to">Saved to: </string>
+    <string name="stor_saver">Download</string>
+    <string name="refre">Refreshed!</string>
 
     <string name="lockscreen_access_pattern_cell_added">Cell added</string>
     <string name="lockscreen_access_pattern_start">Draw the unlock pattern</string>
@@ -42,7 +65,6 @@ Posting rules you should be taking care of before you start interaction on our w
     <string name="desc3">Security feature that helps prevent unauthorized access to your locked apps.</string>
     <string name="title4">Hide Apps</string>
     <string name="desc4">" Users can select the apps they want to hide and will no longer be visible on the home screen "</string>
-    <!-- TODO: Remove or change this placeholder text -->
 
     <string name="share_txt">Hey view/download this image</string>
     <string name="share_image_via">Share File via...</string>

@@ -1,57 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="90dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="8dp"
-    android:elevation="8dp"
-    android:outlineAmbientShadowColor="@color/grey"
-    android:outlineSpotShadowColor="@color/grey"
-    android:orientation="horizontal"
-    android:gravity="center"
-    android:background="@drawable/rect_corners_round_white_24">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/img_background"
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/rect_corners_round_white_24"
+        android:elevation="8dp"
         android:gravity="center"
-        android:background="@drawable/rect_corners_round_color_24"
-        >
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/img_instagram"
-            />
+        android:orientation="horizontal"
+        android:outlineAmbientShadowColor="@color/grey"
+        android:outlineSpotShadowColor="@color/grey">
+
+        <LinearLayout
+            android:id="@+id/img_background"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/rect_corners_round_color_24"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/img_instagram" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_weight="1"
+            android:text="Name"
+            android:textColor="@color/secondary"
+            android:textSize="16sp" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/insta_color"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/baseline_arrow_forward_24"
+                app:tint="@color/secondary" />
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Name"
-        android:textColor="@color/secondary"
-        android:layout_marginHorizontal="12dp"
-        android:textSize="16sp"
-        />
-
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:cardCornerRadius="20dp"
-        android:layout_marginEnd="12dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@color/insta_color"
+        android:id="@+id/adsView0"
+        android:visibility="gone"
+        android:layout_margin="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        app:cardBackgroundColor="@color/white"
+        android:outlineAmbientShadowColor="@color/grey"
+        android:outlineSpotShadowColor="@color/grey"
         >
-        <ImageView
-            android:layout_width="wrap_content"
+        <com.adsmodule.api.adsModule.interfaces.CustomView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/baseline_arrow_forward_24"
-            app:tint="@color/secondary" />
+            app:adType="small"
+            />
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>

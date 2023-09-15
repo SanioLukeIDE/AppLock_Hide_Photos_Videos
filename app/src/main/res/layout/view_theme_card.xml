@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/theme1" />
+            />
 
         <TextView
             android:id="@+id/tv_name"
@@ -58,9 +58,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/theme1" />
+             />
 
-        <com.applock.photos.videos.libs.LockPatternView
+        <com.applock.fingerprint.passwordlock.libs.LockPatternView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"

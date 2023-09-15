@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.applock.photos.videos'
+    namespace 'com.applock.fingerprint.passwordlock'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.applock.photos.videos"
+        applicationId "com.applock.fingerprint.passwordlock"
         minSdk 24
         targetSdk 33
         versionCode 1
@@ -69,9 +69,11 @@ dependencies {
 
     // Room DB
     implementation "androidx.room:room-runtime:2.5.2"
+    annotationProcessor "androidx.room:room-compiler:2.5.2"
+//    kapt  "androidx.room:room-compiler:2.5.2"
+
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.camera:camera-lifecycle:1.2.3'
-    annotationProcessor "androidx.room:room-compiler:2.5.2"
 
     // Images
     implementation 'com.airbnb.android:lottie:6.0.0'
@@ -102,6 +104,7 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
 
     implementation 'org.apache.commons:commons-text:1.9'
+    implementation 'commons-io:commons-io:2.9.0'
 
     //rest api retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

@@ -3,8 +3,8 @@
     <dbname value="sample" />
     <version value="1" />
     <list>
-        <mapping class="com.applock.photos.videos.model.CommLockInfo" />
-        <mapping class="com.applock.photos.videos.model.FavoriteInfo" />
+        <mapping class="com.applock.fingerprint.passwordlock.model.CommLockInfo" />
+        <mapping class="com.applock.fingerprint.passwordlock.model.FavoriteInfo" />
 <!--        <mapping class="com.applock.photos.videos.model.LockPrivate"/>-->
     </list>
 

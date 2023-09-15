@@ -142,5 +142,18 @@
 
         </LinearLayout>
 
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <com.adsmodule.api.adsModule.interfaces.CustomView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:adType="small"
+            android:layout_margin="8dp"
+            />
+
     </LinearLayout>
 </layout>

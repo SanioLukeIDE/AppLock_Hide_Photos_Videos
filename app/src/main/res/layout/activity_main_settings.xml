@@ -192,6 +192,13 @@
 
                 </LinearLayout>
 
+                <com.adsmodule.api.adsModule.interfaces.CustomView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:adType="full"
+                    android:layout_margin="8dp"
+                    />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

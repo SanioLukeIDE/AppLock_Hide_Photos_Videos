@@ -29,9 +29,11 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
     <queries>
-        <package android:name="com.applock.photos.videos" />
+        <package android:name="com.applock.fingerprint.passwordlock" />
 
         <intent>
             <action android:name="android.intent.action.VIEW" />
@@ -54,6 +56,7 @@
         android:name=".singletonClass.MyApplication"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -63,10 +66,31 @@
         android:theme="@style/Theme.AppLockHidePhotosVideos"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".ui.activity.PermissionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.TMCActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.TMCUseActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.StatusSaverActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.SavedFilesActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.ImageIntruderActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.CalculatorLockActivity"
+            android:excludeFromRecents="true"
+            android:label=""
+            android:launchMode="singleTask"
+            android:noHistory="true"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -171,17 +195,29 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <service
-            android:name=".service.LoadAppListService"
-            android:enabled="true"
-            android:exported="false"
-            android:stopWithTask="false" />
-        <service
-            android:name=".service.LockService"
-            android:enabled="true"
-            android:exported="false"
-            android:stopWithTask="false" />
-        <service android:name="com.applock.photos.videos.service.CameraService" />
+        <receiver android:name=".service.AppLaunchReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+
+        <!-- <service
+             android:name=".service.LoadAppListService"
+             android:enabled="true"
+             android:exported="false"
+             android:stopWithTask="false" />
+         <service
+             android:name=".service.LockService"
+             android:enabled="true"
+             android:exported="false"
+             android:stopWithTask="false" />-->
+        <service android:name=".service.LoadAppListService"/>
+        <service android:name=".service.LockService"/>
+        <service android:name=".service.CameraService" />
 
         <receiver
             android:name=".service.BootBroadcastReceiver"

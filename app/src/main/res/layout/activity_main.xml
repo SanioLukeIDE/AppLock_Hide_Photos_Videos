@@ -23,7 +23,7 @@
                 tools:layout="@layout/fragment_navigation_drawer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:name="com.applock.photos.videos.ui.fragments.NavigationDrawerFragment"
+                android:name="com.applock.fingerprint.passwordlock.ui.fragments.NavigationDrawerFragment"
                 />
         </com.google.android.material.navigation.NavigationView>
 
@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:name="com.applock.photos.videos.ui.fragments.HomeFragment"
+                android:name="com.applock.fingerprint.passwordlock.ui.fragments.HomeFragment"
                 tools:layout="@layout/fragment_home"
                 />
 

@@ -57,5 +57,11 @@
             android:layout_margin="8dp"
             />
 
+        <com.adsmodule.api.adsModule.interfaces.CustomView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:adType="small"/>
+
     </LinearLayout>
 </layout>

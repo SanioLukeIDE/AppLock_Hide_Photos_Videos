@@ -3,11 +3,13 @@
 
     <declare-styleable name="CustomView">
         <attr name="adType" format="string">
-    <!--        <enum name="small" value="small"/>
-            <enum name="medium" value="medium"/>
-            <enum name="full" value="full"/>-->
+          <!--  <enum name="small" value="0"/>
+            <enum name="medium" value="1"/>
+            <enum name="full" value="2"/>-->
         </attr>
         <attr name="placeholder" format="reference" />
+        <attr name="placementType" format="string" />
         <attr name="borderColor" format="integer|color" />
+        <attr name="adsElevation" format="float|integer" />
     </declare-styleable>
 </resources>

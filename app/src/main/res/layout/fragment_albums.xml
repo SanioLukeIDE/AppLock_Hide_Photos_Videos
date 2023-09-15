@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.core.widget.NestedScrollView
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.fragments.AlbumsFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:descendantFocusability="afterDescendants"
+            android:orientation="vertical">
+
+            <com.adsmodule.api.adsModule.interfaces.CustomView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:adType="full"
+                app:borderColor="@color/secondary"
+                android:layout_margin="8dp"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/all_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                tools:listitem="@layout/view_album_list" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="80dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:indeterminateTint="@color/primary"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/content_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="3"
+                tools:listitem="@layout/view_album_list" />
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

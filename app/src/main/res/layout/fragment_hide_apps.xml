@@ -163,6 +163,15 @@
                 android:orientation="vertical"
                 android:descendantFocusability="afterDescendants"
                 >
+
+                <com.adsmodule.api.adsModule.interfaces.CustomView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:adType="full"
+                    app:borderColor="@color/secondary"
+                    android:layout_margin="8dp"
+                    />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
@@ -175,6 +184,7 @@
                     tools:listitem="@layout/view_apps_list"
                     />
             </LinearLayout>
+
         </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>

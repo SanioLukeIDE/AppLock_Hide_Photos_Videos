@@ -11,6 +11,8 @@
 
         <ImageView
             android:id="@+id/bg_layout"
+            android:scaleType="centerCrop"
+            android:layout_centerInParent="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -35,7 +37,7 @@
             android:paddingRight="20dp"
             android:src="@drawable/baseline_more_vert_24" />
 
-        <com.applock.photos.videos.libs.LockPatternView
+        <com.applock.fingerprint.passwordlock.libs.LockPatternView
             android:id="@+id/unlock_lock_view"
             android:layout_width="280.0dip"
             android:layout_height="280.0dip"

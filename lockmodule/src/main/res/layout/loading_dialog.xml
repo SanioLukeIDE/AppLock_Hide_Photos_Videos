@@ -25,7 +25,7 @@
             android:layout_margin="10dp"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/toilet"
+            app:lottie_rawRes="@raw/closing_lock"
             app:lottie_speed="1" />
     </LinearLayout>
 
